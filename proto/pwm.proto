@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package pwm;
+option go_package = "zpicier/src/GO/pb;pwm"; // import path;alias
+service PWMService {
+  rpc SetPWM (PWMRequest) returns (PWMResponse);
+}
+
+message PWMRequest {
+  int32 channel_id = 1;
+  int32 speed = 2; // microseconds
+}
+
+message PWMResponse {
+  string status = 1;
+}
