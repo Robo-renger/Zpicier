@@ -3,8 +3,7 @@
 import grpc
 import warnings
 
-from . import pwm_pb2 as pwm__pb2
-
+from . import joy_pb2 as joy__pb2
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
@@ -18,14 +17,14 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in pwm_pb2_grpc.py depends on'
+        + f' but the generated code in joy_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
 
 
-class PWMServiceStub(object):
+class JoystickServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -34,43 +33,43 @@ class PWMServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.SetPWM = channel.unary_unary(
-                '/pwm.PWMService/SetPWM',
-                request_serializer=pwm__pb2.PWMRequest.SerializeToString,
-                response_deserializer=pwm__pb2.PWMResponse.FromString,
+        self.UpdateState = channel.unary_unary(
+                '/joystick.JoystickService/UpdateState',
+                request_serializer=joy__pb2.JoystickRequest.SerializeToString,
+                response_deserializer=joy__pb2.JoystickResponse.FromString,
                 _registered_method=True)
 
 
-class PWMServiceServicer(object):
+class JoystickServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def SetPWM(self, request, context):
+    def UpdateState(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_PWMServiceServicer_to_server(servicer, server):
+def add_JoystickServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'SetPWM': grpc.unary_unary_rpc_method_handler(
-                    servicer.SetPWM,
-                    request_deserializer=pwm__pb2.PWMRequest.FromString,
-                    response_serializer=pwm__pb2.PWMResponse.SerializeToString,
+            'UpdateState': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateState,
+                    request_deserializer=joy__pb2.JoystickRequest.FromString,
+                    response_serializer=joy__pb2.JoystickResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'pwm.PWMService', rpc_method_handlers)
+            'joystick.JoystickService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('pwm.PWMService', rpc_method_handlers)
+    server.add_registered_method_handlers('joystick.JoystickService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class PWMService(object):
+class JoystickService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def SetPWM(request,
+    def UpdateState(request,
             target,
             options=(),
             channel_credentials=None,
@@ -83,9 +82,9 @@ class PWMService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/pwm.PWMService/SetPWM',
-            pwm__pb2.PWMRequest.SerializeToString,
-            pwm__pb2.PWMResponse.FromString,
+            '/joystick.JoystickService/UpdateState',
+            joy__pb2.JoystickRequest.SerializeToString,
+            joy__pb2.JoystickResponse.FromString,
             options,
             channel_credentials,
             insecure,

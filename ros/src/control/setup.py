@@ -21,6 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
             'pwm_sender_node = nodes.PWMSender:main',
+            'imu_node = nodes.IMUNode:main',
+            'joystick_channel_node = nodes.JoystickNode:main',
         ],
     },
 )

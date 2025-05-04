@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package joystick;
+option go_package = "zpicier/src/GO/pb/joystick;joystick";
+
+service JoystickService {
+  rpc UpdateState (JoystickRequest) returns (JoystickResponse);
+}
+
+message JoystickRequest {
+  map<string, bool> buttons = 1;  // Example: {"lights": true, "arm": false}
+
+  double axis_x = 2;
+  double axis_y = 3;
+  double axis_z = 4;
+
+  double roll  = 5;
+  double pitch = 6;
+  double yaw   = 7;
+}
+
+message JoystickResponse {
+  string status = 1; // "OK" or error message
+}

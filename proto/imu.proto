@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package imu;
+option go_package = "zpicier/src/GO/pb;imu";
+
+service IMUService {
+  rpc SetEulerAngles (IMURequest) returns (IMUResponse);
+}
+
+message IMURequest {
+  double pitch = 1;
+  double roll  = 2;
+  double yaw   = 3;
+}
+
+message IMUResponse {
+  string status = 1;
+}
