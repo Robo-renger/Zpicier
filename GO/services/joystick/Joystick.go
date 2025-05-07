@@ -1,6 +1,11 @@
 package joystick
 
-import "sync"
+import (
+	"fmt"
+	"strings"
+	"sync"
+	"zpicier/core/configurator"
+)
 
 type Joystick struct {
 	mu sync.RWMutex
@@ -8,6 +13,7 @@ type Joystick struct {
 	axisX, axisY, axisZ          float64
 	axisPitch, axisYaw, axisRoll float64
 	activeButtons                map[string]bool
+	buttonMappings 				 map[string]string 
 }
 
 var (
@@ -18,8 +24,17 @@ var (
 // GetInstance returns the global singleton Joystick
 func GetInstance() *Joystick {
 	once.Do(func() {
-		instance = &Joystick{
+		mappings := make(map[string]string)
+		for k, v := range configurator.GetAll() {
+			if strings.HasPrefix(k, "BUTTON_") {
+				k = strings.ToLower(k)
+				fmt.Println("Adding button mapping:", k, "->", v)
+				mappings[k] = v
+			}
+		}
+			instance = &Joystick{
 			activeButtons: make(map[string]bool),
+			buttonMappings: mappings,
 		}
 	})
 	return instance
@@ -37,13 +52,15 @@ func (j *Joystick) IsClicked(mechanism string) bool {
 }
 
 // UpdateButtons replaces the internal button map
-func (j *Joystick) UpdateButtons(buttons map[string]bool) {
+func (j *Joystick) UpdateButtons(raw map[string]bool) {
 	j.mu.Lock()
 	defer j.mu.Unlock()
 
 	j.activeButtons = make(map[string]bool)
-	for k, v := range buttons {
-		j.activeButtons[k] = v
+	for rawButton, pressed := range raw {
+		if action, exists := j.buttonMappings[rawButton]; exists {
+			j.activeButtons[action] = pressed
+		}
 	}
 }
 

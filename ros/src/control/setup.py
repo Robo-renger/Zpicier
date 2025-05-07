@@ -10,6 +10,8 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/launch', ['launch/run.py']),
+
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -20,9 +22,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'pwm_sender_node = nodes.PWMSender:main',
             'imu_node = nodes.IMUNode:main',
             'joystick_channel_node = nodes.JoystickNode:main',
+            'gui_streamer = nodes.GUIStreamingNode:main',
         ],
     },
 )

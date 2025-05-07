@@ -70,6 +70,7 @@ func (n *SwitchingNode) runSwitches() {
 func (n *SwitchingNode) frontGripper() {
 	componentName := "FRONTGRIPPER"
 	state := n.joystick.IsClicked(componentName)
+	// fmt.Println("alo", state)
 	if state {
 		err := n.switches[componentName].Toggle()
 		if err != nil {

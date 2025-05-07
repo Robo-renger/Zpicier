@@ -1,34 +1,54 @@
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import Imu
 import grpc
 import data_contracts.imu_pb2_grpc as imu__pb2_grpc
 import data_contracts.imu_pb2 as imu__pb2
 from core.Dispatcher import Dispatcher
+from grpc import FutureTimeoutError
+
 class IMUNode(Node):
     def __init__(self):
         super().__init__('imu_sender_node')
-        self.stub = imu__pb2_grpc.IMUServiceStub(grpc.insecure_channel("localhost:50051"))
+        self.grpc_connected = False
+        self.channel = None
+        self.stub = None
         self.imu = Dispatcher.getIMU()
 
-        # Run every 0.1 seconds (10 Hz)
+        # Retry connection every 2 seconds (non-blocking)
+        self.grpc_timer = self.create_timer(2.0, self.connect_to_grpc)
+
+        # Send IMU data every 0.01s
         self.timer = self.create_timer(0.01, self.run)
 
-    def run(self):
-        data = self.imu.getEulerAngles()
-        roll, pitch, yaw = data
+    def connect_to_grpc(self):
+        if self.grpc_connected:
+            return
 
+        try:
+            self.get_logger().info("Attempting gRPC connection...")
+            self.channel = grpc.insecure_channel('localhost:50051')
+            grpc.channel_ready_future(self.channel).result(timeout=2)
+            self.stub = imu__pb2_grpc.IMUServiceStub(self.channel)
+            self.grpc_connected = True
+            self.get_logger().info("gRPC connected.")
+        except FutureTimeoutError:
+            self.get_logger().warn("gRPC connection failed. Will retry...")
+
+    def run(self):
+        if not self.grpc_connected:
+            return
+
+        roll, pitch, yaw = self.imu.getEulerAngles()
         request = imu__pb2.IMURequest(pitch=pitch, roll=roll, yaw=yaw)
         try:
             response = self.stub.SetEulerAngles(request)
-            self.get_logger().info(f"Sent IMU → Roll: {roll:.2f}, Pitch: {pitch:.2f}, Yaw: {yaw:.2f} | Response: {response.status}")
         except grpc.RpcError as e:
-            self.get_logger().error(f"gRPC failed: {e.details()}")
-
+            self.grpc_connected = False  # Force reconnection
+            self.get_logger().error(f"gRPC failed: {e.details() if hasattr(e, 'details') else str(e)}")
 
 def main(args=None):
     rclpy.init(args=args)
     node = IMUNode()
-    node.run()
     rclpy.spin(node)
+    node.destroy_node()
     rclpy.shutdown()
