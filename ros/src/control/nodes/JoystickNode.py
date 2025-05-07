@@ -4,11 +4,12 @@ import grpc
 import time
 
 from data_contracts import joy_pb2, joy_pb2_grpc
-
+from utils.Configurator import Configurator
 class JoystickNode(Node):
     def __init__(self):
         super().__init__('joystick_channel_node')
-
+        config = Configurator()
+        print(config.fetchData(Configurator.BUTTONS))
         self.channel = None
         self.stub = None
         self.grpc_connected = False
