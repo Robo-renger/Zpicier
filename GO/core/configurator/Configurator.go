@@ -108,13 +108,20 @@ func loadYAMLFiles(paths []string) (map[string]string, error) {
 	return merged, nil
 }
 
-// Get returns the value for a key (case-insensitive, stored upper)
-func Get(key string) (string, bool) {
+// checks if exists returns the value for a key (case-insensitive, stored upper)
+func checkFetch(key string) (string, bool) {
 	if instance == nil {
 		return "", false
 	}
 	val, ok := instance.config[strings.ToUpper(key)]
 	return val, ok
+}
+func Get(key string) string {
+	val, ok := checkFetch(key)
+	if !ok {
+		panic("config key not found: " + key)
+	}
+	return val
 }
 
 // GetAll returns the merged flat map

@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"zpicier/core/configurator"
 	joy "zpicier/services/joystick"
 	"zpicier/services/switching"
 )
@@ -26,9 +27,9 @@ func NewNode() *SwitchingNode {
 func (n *SwitchingNode) Init() error {
 	// Example: initialize 3 switches for GPIO17, GPIO18, GPIO27
 	pins := map[string]interface{}{
-		"main_light": 17,
-		"pump":       18,
-		"valve":      "GPIO27",
+		"verticalGripper": configurator.Get("VERTICALGRIPPER_SWITCH"),
+		"FRONTGRIPPER": configurator.Get("FRONTGRIPPER_SWITCH"),
+		"leftGripper": configurator.Get("LEFTGRIPPER_SWITCH"),
 	}
 
 	for label, ref := range pins {
@@ -59,43 +60,47 @@ func (n *SwitchingNode) Run() {
 func (n *SwitchingNode) runSwitches() {
 	defer n.wg.Done()
 	for {
-		n.mainLight()
-		n.pump()
-		n.valve()
+		n.frontGripper()
+		n.verticalGripper()
+		n.leftGripper()
 		time.Sleep(100 * time.Millisecond) // polling delay
 	}
 }
 
-func (n *SwitchingNode) mainLight() {
-	state := n.joystick.IsClicked("main_light")
+func (n *SwitchingNode) frontGripper() {
+	componentName := "FRONTGRIPPER"
+	state := n.joystick.IsClicked(componentName)
 	if state {
-		err := n.switches["main_light"].Toggle()
+		err := n.switches[componentName].Toggle()
 		if err != nil {
-			log.Printf("[Main Light] error: %v", err)
+			log.Printf("[%v] error: %v",componentName,err)
 		}else {
-			log.Printf("[Main Light] toggled --> ON? %v", n.switches["main_light"].IsOn())
+			log.Printf("[%v] toggled --> ON? %v",componentName,n.switches[componentName].IsOn())
 		}
 	}
 }
-func (n *SwitchingNode) pump() {
-	state := n.joystick.IsClicked("pump")
+func (n *SwitchingNode) verticalGripper() {
+	componentName := "VERTICALGRIPPER"
+	state := n.joystick.IsClicked(componentName)
 	if state {
-		err := n.switches["pump"].Toggle()
+		err := n.switches[componentName].Toggle()
 		if err != nil {
-			log.Printf("[Pump] error: %v", err)
+			log.Printf("[%v] error: %v",componentName,err)
 		}else {
-			log.Printf("[Pump] toggled --> ON? %v", n.switches["pump"].IsOn())
+			log.Printf("[%v] toggled --> ON? %v",componentName,n.switches[componentName].IsOn())
 		}
 	}
 }
-func (n *SwitchingNode) valve() {
-	state := n.joystick.IsClicked("valve")
+func (n *SwitchingNode) leftGripper() {
+	componentName := "LEFTGRIPPER"
+	state := n.joystick.IsClicked(componentName)
 	if state {
-		err := n.switches["valve"].Toggle()
+		err := n.switches[componentName].Toggle()
 		if err != nil {
-			log.Printf("[Valve] error: %v", err)
+			log.Printf("[%v] error: %v",componentName,err)
 		}else {
-			log.Printf("[Valve] toggled --> ON? %v", n.switches["valve"].IsOn())
+			log.Printf("[%v] toggled --> ON? %v",componentName,n.switches[componentName].IsOn())
 		}
 	}
 }
+

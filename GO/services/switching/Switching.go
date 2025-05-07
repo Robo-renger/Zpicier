@@ -2,9 +2,9 @@ package switching
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 	"sync"
+	EnvParams "zpicier/core/env_params"
 
 	"periph.io/x/conn/v3/gpio"
 	"periph.io/x/conn/v3/gpio/gpioreg"
@@ -30,9 +30,9 @@ func NewSwitch(pinRef interface{}) (*Switch, error) {
 	default:
 		return nil, fmt.Errorf("unsupported pin type %T, must be string or int", pinRef)
 	}
-
+	
 	// Check for simulation mode
-	if os.Getenv("ENV") == "SIMULATION" {
+	if EnvParams.Get("ENV") == "SIMULATION" {
 		fmt.Printf("[SIMULATION] Initializing switch on %s\n", pinName)
 		return &Switch{
 			pinName:   pinName,

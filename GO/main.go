@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"os"
 	"sync"
 
 	"zpicier/core/configurator"
@@ -15,13 +14,12 @@ import (
 )
 
 func main() {
-	os.Setenv("ENV", "SIMULATION")
 	configurator.AddConfigPath("config/joystick_buttons.yaml")
 
 	if err := configurator.Init(); err != nil {
 		panic(err)
 	}
-	button, _ := configurator.Get("button_l1")
+	button := configurator.Get("VERTICALGRIPPER_SWITCH")
 	fmt.Println(button)
 
 	var wg sync.WaitGroup
