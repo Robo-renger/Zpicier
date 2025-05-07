@@ -7,6 +7,7 @@ import (
 	"os"
 	"sync"
 
+	"zpicier/core/configurator"
 	nodemanager "zpicier/core/node_manager"
 	serverRegistery "zpicier/core/server_registery"
 
@@ -15,6 +16,13 @@ import (
 
 func main() {
 	os.Setenv("ENV", "SIMULATION")
+	configurator.AddConfigPath("config/joystick_buttons.yaml")
+
+	if err := configurator.Init(); err != nil {
+		panic(err)
+	}
+	button, _ := configurator.Get("button_l1")
+	fmt.Println(button)
 
 	var wg sync.WaitGroup
 	nodeManager := nodemanager.NewNodeManager(&wg) 
