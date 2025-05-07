@@ -10,7 +10,7 @@ import (
 type Joystick struct {
 	mu sync.RWMutex
 
-	axisX, axisY, axisZ          float64
+	axisX, axisY         float64
 	axisPitch, axisYaw, axisRoll float64
 	activeButtons                map[string]bool
 	buttonMappings 				 map[string]string 
@@ -71,16 +71,15 @@ func (j *Joystick) UpdateAxes(x, y, z, pitch, yaw, roll float64) {
 
 	j.axisX = x
 	j.axisY = y
-	j.axisZ = z
 	j.axisPitch = pitch
 	j.axisYaw = yaw
 	j.axisRoll = roll
 }
 
 // GetAxes returns current axis values
-func (j *Joystick) GetAxes() (x, y, z, pitch, yaw, roll float64) {
+func (j *Joystick) GetAxes() (x, y, pitch, yaw, roll float64) {
 	j.mu.RLock()
 	defer j.mu.RUnlock()
 
-	return j.axisX, j.axisY, j.axisZ, j.axisPitch, j.axisYaw, j.axisRoll
+	return j.axisX, j.axisY,  j.axisRoll, j.axisPitch, j.axisYaw
 }

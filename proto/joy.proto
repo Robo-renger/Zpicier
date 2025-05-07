@@ -12,11 +12,10 @@ message JoystickRequest {
 
   double axis_x = 2;
   double axis_y = 3;
-  double axis_z = 4;
 
-  double roll  = 5;
-  double pitch = 6;
-  double yaw   = 7;
+  double roll  = 4;
+  double pitch = 5;
+  double yaw   = 6;
 }
 
 message JoystickResponse {

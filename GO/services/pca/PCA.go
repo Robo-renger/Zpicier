@@ -3,9 +3,9 @@ package pca
 import (
 	"fmt"
 	"log"
-	"os"
 	"sync"
 	"time"
+	EnvParams "zpicier/core/env_params"
 
 	"periph.io/x/conn/v3/i2c"
 	"periph.io/x/conn/v3/i2c/i2creg"
@@ -33,7 +33,7 @@ var (
 // GetInstance returns a singleton PCA instance
 func GetInstance(frequency float64) *PCA {
 	once.Do(func() {
-		env := os.Getenv("ENV")
+		env := EnvParams.Get("ENV")
 		simMode := env == "SIMULATION"
 		p := &PCA{
 			simulationMode: simMode,

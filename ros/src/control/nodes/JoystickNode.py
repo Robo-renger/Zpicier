@@ -7,13 +7,12 @@ from concurrent.futures import TimeoutError as GRPCTimeoutError
 from data_contracts import joy_pb2, joy_pb2_grpc
 from utils.Configurator import Configurator
 from msgs.msg import Joystick
-
+import time
 class JoystickNode(Node):
     def __init__(self):
         super().__init__('joystick_channel_node')
         self.mapped_buttons = {}
-        self.lock = threading.Lock() 
-        # Load configuration
+        self.lock = threading.Lock()
         config = Configurator()
 
         # gRPC setup
@@ -21,7 +20,6 @@ class JoystickNode(Node):
         self.stub = None
         self.grpc_connected = False
 
-        # Subscribe to joystick topic
         self.subscriber = self.create_subscription(
             Joystick,
             '/joystick',
@@ -31,6 +29,8 @@ class JoystickNode(Node):
 
         self.grpc_timer = self.create_timer(2.0, self.try_connect_grpc)
         self.send_timer = self.create_timer(0.01, self.send_joystick_data)
+
+        # Register shutdown callback
 
     def try_connect_grpc(self):
         if self.grpc_connected:
@@ -49,15 +49,13 @@ class JoystickNode(Node):
         if not self.grpc_connected:
             return
 
-        # Safely read shared data
         with self.lock:
-            button_data = dict(self.mapped_buttons)  # shallow copy
+            button_data = dict(self.mapped_buttons)
 
-        self.get_logger().info(str(button_data))
         request = joy_pb2.JoystickRequest(
             buttons=button_data,
-            axis_x=0.2, axis_y=-0.1, axis_z=0.5,
-            roll=1.2, pitch=-0.6, yaw=0.8
+            axis_x=0.0, axis_y= 1.0, axis_z=0.0,
+            roll=0.0, pitch=0.0, yaw=0.0
         )
         try:
             response = self.stub.UpdateState(request)
@@ -67,14 +65,37 @@ class JoystickNode(Node):
             self.get_logger().error(f"gRPC error: {e.details() if hasattr(e, 'details') else str(e)}")
 
     def joystick_callback(self, msg: Joystick):
-        # self.get_logger().info(f"  Buttons: {msg.button_names}")
-        # self.get_logger().info(f"  States: {msg.button_states}")
         with self.lock:
             self.mapped_buttons = dict(zip(msg.button_names, msg.button_states))
+
+    def send_zeroed_message(self):
+        if not self.grpc_connected:
+            return
+
+        with self.lock:
+            zeroed_buttons = {key: False for key, value in self.mapped_buttons.items() if value}
+
+        request = joy_pb2.JoystickRequest(
+            buttons=zeroed_buttons,
+            axis_x=0.0, axis_y=0.0, axis_z=0.0,
+            roll=0.0, pitch=0.0, yaw=0.0
+        )
+        try:
+            response = self.stub.UpdateState(request)
+            self.get_logger().info("Sent final zeroed joystick state before shutdown.")
+            time.sleep(0.1)
+        except grpc.RpcError as e:
+            self.get_logger().error(f"Failed to send shutdown message: {e.details() if hasattr(e, 'details') else str(e)}")
 
 def main(args=None):
     rclpy.init(args=args)
     node = JoystickNode()
-    rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
+
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        node.get_logger().info("Keyboard interrupt detected. Shutting down.")
+    finally:
+        node.send_zeroed_message()  # ✅ Send final data before shutdown
+        node.destroy_node()
+        rclpy.shutdown()

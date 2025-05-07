@@ -1,0 +1,153 @@
+package navigation_node
+
+import (
+	"context"
+	"fmt"
+	"math"
+	"sync"
+	"time"
+	dtos "zpicier/DTOs"
+	"zpicier/core/configurator"
+	"zpicier/services/joystick"
+	"zpicier/services/navigation"
+	PID "zpicier/services/pid_controller"
+	"zpicier/services/thruster"
+)
+
+type NavigationNode struct {
+	thrusters map[string]*thruster.Thruster
+	joystick  *joystick.Joystick
+	ctx        context.Context
+	cancel     context.CancelFunc
+	wg         *sync.WaitGroup
+	navigation *navigation.Navigation
+	x float64
+	y float64
+	z float64
+	roll float64
+	pitch float64
+	yaw float64
+	pid_yaw *PID.PIDController
+	pid_pitch *PID.PIDController
+	pid_pitch_horizontal *PID.PIDController
+	pid_pitch_vertical *PID.PIDController
+	pid_heave *PID.PIDController
+	pid_heave_live *PID.PIDController
+	imu *dtos.IMU
+}
+var(
+	activePID bool
+	manualSetPoint bool
+	fix_heading bool
+	fix_tilting bool
+	fix_heave bool
+	is_rotating bool
+	capture bool
+	neutralPitch float64
+)
+func NewNode() *NavigationNode {
+	ctx, cancel := context.WithCancel(context.Background())
+	return &NavigationNode{
+		thrusters: make(map[string]*thruster.Thruster),
+		joystick:  joystick.GetInstance(),
+		navigation: navigation.NewNavigation(),
+		wg: new(sync.WaitGroup),
+		ctx:        ctx,
+		cancel:     cancel,
+		pid_yaw: PID.NewPIDController(configurator.Get("yaw_KP"), configurator.Get("yaw_KI"), configurator.Get("yaw_KD")),
+		pid_pitch: PID.NewPIDController(configurator.Get("pitch_KP"), configurator.Get("pitch_KI"), configurator.Get("pitch_KD")),
+		pid_pitch_horizontal: PID.NewPIDController(configurator.Get("horizontal_pitch_KP"), configurator.Get("horizontal_pitch_KI"), configurator.Get("horizontal_pitch_KD")),
+		pid_pitch_vertical: PID.NewPIDController(configurator.Get("vertical_pitch_KP"), configurator.Get("vertical_pitch_KI"), configurator.Get("vertical_pitch_KD")),
+		pid_heave: PID.NewPIDController(configurator.Get("heave_KP"), configurator.Get("heave_KI"), configurator.Get("heave_KD")),
+		pid_heave_live: PID.NewPIDController(configurator.Get("live_heave_KP"), configurator.Get("live_heave_KI"), configurator.Get("live_heave_KD")),
+		imu: dtos.GetIMUInstance(),
+	}
+}
+func (n *NavigationNode) Init() error {
+	activePID = true 
+	manualSetPoint = false 
+	fix_heading = false 
+	fix_tilting = false 
+	fix_heave = false 
+	is_rotating = false 
+	capture = false 
+	// neutralPitch = n.calibratePitchNeutral()
+	n.thrusters = map[string]*thruster.Thruster{
+		"front_right": thruster.NewThruster(configurator.Get("FRONT_RIGHT_PCA_CHANNEL"), 1100, 1900, 135),
+		"front_left":  thruster.NewThruster(configurator.Get("FRONT_LEFT_PCA_CHANNEL"), 1100, 1900, 45),
+		"back_right":  thruster.NewThruster(configurator.Get("BACK_RIGHT_PCA_CHANNEL"), 1100, 1900, 315),
+		"back_left":   thruster.NewThruster(configurator.Get("BACK_LEFT_PCA_CHANNEL"), 1100, 1900, 225),
+		"back":        thruster.NewThruster(configurator.Get("BACK_PCA_CHANNEL"), 1100, 1900, 90),
+		"front":       thruster.NewThruster(configurator.Get("FRONT_PCA_CHANNEL"), 1100, 1900, 90),
+	}
+	n.navigation.SetThrusters(n.thrusters)
+	return nil
+}
+func (n *NavigationNode) handle() {
+	n.wg.Add(2)
+	go n.startJoystickReader()
+	go n.startNavigationLoop()
+	n.wg.Wait()
+}
+
+
+func (n *NavigationNode) startJoystickReader() {
+	defer n.wg.Done()
+	for {
+		select {
+		case <-n.ctx.Done():
+			return
+		default:
+			n.x, n.y, n.roll, n.pitch, n.yaw = n.joystick.GetAxes()
+			if n.joystick.IsClicked("HEAVE_UP") {
+				n.z = math.Min(1, n.z+0.07)
+			} else if n.joystick.IsClicked("HEAVE_DOWN") {
+				n.z = math.Max(-1, n.z-0.07)
+			} else {
+				n.z = 0
+			}
+			time.Sleep(10 * time.Millisecond)
+		}
+	}
+}
+func (n *NavigationNode) startNavigationLoop() {
+	defer n.wg.Done()
+	for {
+		select {
+		case <-n.ctx.Done():
+			return
+		default:
+			if n.x == 0 && n.y == 0 && n.z == 0 && n.roll == 0 && n.pitch == 0 && n.yaw == 0 {
+				time.Sleep(10 * time.Millisecond)
+				continue
+			}
+
+			n.navigation.Navigate(n.x, n.y, n.z, n.roll, n.pitch, n.yaw)
+			time.Sleep(10 * time.Millisecond)
+		}
+	}
+}
+
+
+func (n *NavigationNode) Run() {
+	if err := n.Init(); err != nil {
+		fmt.Printf("Failed to init navigation node: %v\n", err)
+		return
+	}
+
+	go n.handle()
+
+	// Simulate graceful shutdown after 10 seconds for testing
+	time.Sleep(10 * time.Second)
+	n.Stop()
+}
+func (n *NavigationNode) Stop() {
+	n.cancel()
+}
+
+func (n *NavigationNode) stabalizeAtRest() {
+	yaw_output := n.pid_yaw.Update(n.imu.Yaw)
+	pitch_output := n.pid_pitch.Update(n.imu.Pitch)
+	heave_output := n.pid_heave.Update(n.depth)
+	
+}

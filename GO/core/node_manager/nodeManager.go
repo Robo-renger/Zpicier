@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 	"zpicier/core/interfaces"
+	"zpicier/scripts/navigation_node"
 	"zpicier/scripts/switching_node"
 )
 
@@ -38,6 +39,7 @@ func (nm *NodeManager) Run(name string) error {
 
 func (nm *NodeManager) RegisterAll() {
 	nm.Register("switching", switching_node.NewNode())
+	nm.Register("navigation", navigation_node.NewNode())
 
 }
 
