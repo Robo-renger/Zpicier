@@ -9,7 +9,6 @@ import (
 
 	nodemanager "zpicier/core/node_manager"
 	serverRegistery "zpicier/core/server_registery"
-	"zpicier/scripts/switching_node"
 
 	"google.golang.org/grpc"
 )
@@ -39,7 +38,7 @@ func main() {
 		}
 	}()
 
-	nodeManager.Register("switching", switching_node.Run)
+	nodeManager.RegisterAll()
 	nodeManager.RunAll()
 
 	wg.Wait()

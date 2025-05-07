@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"zpicier/core/interfaces"
 	joy "zpicier/services/joystick"
 	"zpicier/services/switching"
 )
@@ -42,18 +43,11 @@ func (n *SwitchingNode) Init() error {
 }
 
 func (n *SwitchingNode) Run() {
+	n.wg.Add(1)
 	go n.runSwitches()
 	n.wg.Wait()
 }
-// To make this node runnable from nodeManager
-func Run() {
-	node := NewNode()
-	if err := node.Init(); err != nil {
-		fmt.Printf("Failed to init switching node: %v\n", err)
-		return
-	}
-	node.Run()
-}
+
 
 func (n *SwitchingNode) runSwitches() {
 	defer n.wg.Done()
@@ -66,6 +60,10 @@ func (n *SwitchingNode) runSwitches() {
 }
 
 func (n *SwitchingNode) mainLight() {
+	if n.switches["main_light"] == nil {
+		log.Printf("[Main Light] ERROR: switch not initialized")
+		return
+	}
 	state := n.joystick.IsClicked("main_light")
 	if state {
 		err := n.switches["main_light"].Toggle()
@@ -77,6 +75,10 @@ func (n *SwitchingNode) mainLight() {
 	}
 }
 func (n *SwitchingNode) pump() {
+	if n.switches["pump"] == nil {
+		log.Printf("[Pump] ERROR: switch not initialized")
+		return
+	}
 	state := n.joystick.IsClicked("pump")
 	if state {
 		err := n.switches["pump"].Toggle()
@@ -88,6 +90,10 @@ func (n *SwitchingNode) pump() {
 	}
 }
 func (n *SwitchingNode) valve() {
+	if n.switches["valve"] == nil {
+		log.Printf("[Valve] ERROR: switch not initialized")
+		return
+	}
 	state := n.joystick.IsClicked("valve")
 	if state {
 		err := n.switches["valve"].Toggle()
@@ -97,4 +103,15 @@ func (n *SwitchingNode) valve() {
 			log.Printf("[Valve] toggled --> ON? %v", n.switches["valve"].IsOn())
 		}
 	}
+}
+
+var _ interfaces.Node = (*SwitchingNode)(nil)
+
+func Run() {
+	node := NewNode()
+	if err := node.Init(); err != nil {
+		fmt.Printf("Failed to init switching node: %v\n", err)
+		return
+	}
+	node.Run()
 }
