@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"zpicier/core/configurator"
+	EnvParams "zpicier/core/env_params"
 	nodemanager "zpicier/core/node_manager"
 	serverRegistery "zpicier/core/server_registery"
 
@@ -14,14 +15,16 @@ import (
 )
 
 func main() {
+	// Initialize configurator and environment parameters
 	configurator.AddConfigPath("config/joystick_buttons.yaml")
-
+	configurator.AddConfigPath("config/hardware_pins.yaml")
+	EnvParams.Init()
+	EnvParams.Get("ENV")
 	if err := configurator.Init(); err != nil {
 		panic(err)
 	}
-	button := configurator.Get("VERTICALGRIPPER_SWITCH")
-	fmt.Println(button)
-
+	// End of initialization
+	
 	var wg sync.WaitGroup
 	nodeManager := nodemanager.NewNodeManager(&wg) 
 

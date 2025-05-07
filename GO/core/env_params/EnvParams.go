@@ -76,6 +76,7 @@ func findProjectRoot() (string, error) {
 		}
 		dir = parent
 	}
+	print("a7a")
 	return "", fmt.Errorf(".env not found in any parent directory")
 }
 
