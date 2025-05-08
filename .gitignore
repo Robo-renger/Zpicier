@@ -1,3 +1,6 @@
 ros/build
 ros/install
 ros/log
+build
+install
+log
