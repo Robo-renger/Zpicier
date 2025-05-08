@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 
 	"zpicier/core/configurator"
 	EnvParams "zpicier/core/env_params"
@@ -15,9 +18,21 @@ import (
 )
 
 func main() {
+	//Handling sigterm
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	// Goroutine to handle signal
+	go func() {
+		sig := <-sigs
+		fmt.Printf("\nReceived signal: %s, exiting...\n", sig)
+		os.Exit(0)
+	}()
+
 	// Initialize configurator and environment parameters
 	configurator.AddConfigPath("config/joystick_buttons.yaml")
 	configurator.AddConfigPath("config/hardware_pins.yaml")
+	configurator.AddConfigPath("config/pid_ks.yaml")
 	EnvParams.Init()
 	EnvParams.Get("ENV")
 	if err := configurator.Init(); err != nil {

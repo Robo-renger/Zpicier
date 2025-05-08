@@ -1,0 +1,227 @@
+[0.013s] Invoking command in '/home/ziad/Zpicier/build/msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ziad/Zpicier/ros/msgs -DCMAKE_INSTALL_PREFIX=/home/ziad/Zpicier/install/msgs
+[0.219s] -- The C compiler identification is GNU 11.4.0
+[1.209s] -- The CXX compiler identification is GNU 11.4.0
+[2.048s] -- Detecting C compiler ABI info
+[2.207s] -- Detecting C compiler ABI info - done
+[2.214s] -- Check for working C compiler: /usr/bin/cc - skipped
+[2.216s] -- Detecting C compile features
+[2.218s] -- Detecting C compile features - done
+[2.223s] -- Detecting CXX compiler ABI info
+[2.552s] -- Detecting CXX compiler ABI info - done
+[2.558s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[2.559s] -- Detecting CXX compile features
+[2.559s] -- Detecting CXX compile features - done
+[2.569s] -- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+[2.713s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[2.822s] -- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+[2.827s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[2.837s] -- Found rosidl_adapter: 3.1.6 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[3.125s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[3.435s] -- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+[3.626s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[3.859s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[4.219s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.12", minimum required is "3.6") 
+[4.222s] -- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+[4.927s] -- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.10.so (found suitable version "3.10.12", minimum required is "3.5") 
+[4.927s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[4.927s] -- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+[4.927s] -- Using PYTHON_LIBRARIES: /usr/lib/x86_64-linux-gnu/libpython3.10.so
+[4.944s] -- Found PythonExtra: .so  
+[5.044s] -- Found ament_lint_auto: 0.12.12 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[5.071s] -- Added test 'lint_cmake' to check CMake code style
+[5.073s] -- Added test 'xmllint' to check XML markup files
+[5.076s] -- Configuring done
+[5.107s] -- Generating done
+[5.117s] -- Build files have been written to: /home/ziad/Zpicier/build/msgs
+[5.123s] Invoked command in '/home/ziad/Zpicier/build/msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ziad/Zpicier/ros/msgs -DCMAKE_INSTALL_PREFIX=/home/ziad/Zpicier/install/msgs
+[5.125s] Invoking command in '/home/ziad/Zpicier/build/msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/ziad/Zpicier/build/msgs -- -j16 -l16
+[5.155s] [  3%] [34m[1mGenerating C code for ROS interfaces[0m
+[5.163s] [  6%] [34m[1mGenerating C++ code for ROS interfaces[0m
+[5.170s] [  6%] Built target ament_cmake_python_copy_msgs
+[5.469s] running egg_info
+[5.470s] creating msgs.egg-info
+[5.470s] writing msgs.egg-info/PKG-INFO
+[5.471s] writing dependency_links to msgs.egg-info/dependency_links.txt
+[5.472s] writing top-level names to msgs.egg-info/top_level.txt
+[5.472s] writing manifest file 'msgs.egg-info/SOURCES.txt'
+[5.477s] reading manifest file 'msgs.egg-info/SOURCES.txt'
+[5.478s] writing manifest file 'msgs.egg-info/SOURCES.txt'
+[5.513s] [  6%] Built target msgs__cpp
+[5.522s] [  9%] [32mBuilding C object CMakeFiles/msgs__rosidl_generator_c.dir/rosidl_generator_c/msgs/msg/detail/joystick__functions.c.o[0m
+[5.523s] [  6%] Built target ament_cmake_python_build_msgs_egg
+[5.526s] [ 12%] [34m[1mGenerating C++ type support dispatch for ROS interfaces[0m
+[5.528s] [ 16%] [34m[1mGenerating C++ type support for eProsima Fast-RTPS[0m
+[5.529s] [ 19%] [34m[1mGenerating C++ introspection for ROS interfaces[0m
+[5.666s] [ 22%] [32m[1mLinking C shared library libmsgs__rosidl_generator_c.so[0m
+[5.885s] [ 25%] [32mBuilding CXX object CMakeFiles/msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/msgs/msg/joystick__type_support.cpp.o[0m
+[5.904s] [ 29%] [32mBuilding CXX object CMakeFiles/msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/msgs/msg/detail/joystick__type_support.cpp.o[0m
+[5.914s] [ 32%] [32mBuilding CXX object CMakeFiles/msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/msgs/msg/detail/dds_fastrtps/joystick__type_support.cpp.o[0m
+[6.035s] [ 32%] Built target msgs__rosidl_generator_c
+[6.051s] [ 35%] [34m[1mGenerating C introspection for ROS interfaces[0m
+[6.052s] [ 38%] [34m[1mGenerating C type support for eProsima Fast-RTPS[0m
+[6.054s] [ 41%] [34m[1mGenerating C type support dispatch for ROS interfaces[0m
+[6.499s] [ 45%] [32m[1mLinking CXX shared library libmsgs__rosidl_typesupport_cpp.so[0m
+[6.561s] [ 48%] [32mBuilding CXX object CMakeFiles/msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/msgs/msg/joystick__type_support.cpp.o[0m
+[6.612s] [ 51%] [32mBuilding CXX object CMakeFiles/msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/msgs/msg/detail/joystick__type_support_c.cpp.o[0m
+[6.614s] [ 54%] [32m[1mLinking CXX shared library libmsgs__rosidl_typesupport_c.so[0m
+[6.653s] [ 58%] [32mBuilding C object CMakeFiles/msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/msgs/msg/detail/joystick__type_support.c.o[0m
+[6.723s] [ 61%] [32m[1mLinking C shared library libmsgs__rosidl_typesupport_introspection_c.so[0m
+[6.881s] [ 64%] [32m[1mLinking CXX shared library libmsgs__rosidl_typesupport_fastrtps_cpp.so[0m
+[6.960s] [ 67%] [32m[1mLinking CXX shared library libmsgs__rosidl_typesupport_introspection_cpp.so[0m
+[6.973s] [ 67%] Built target msgs__rosidl_typesupport_cpp
+[7.106s] [ 67%] Built target msgs__rosidl_typesupport_c
+[7.108s] [ 67%] Built target msgs__rosidl_typesupport_introspection_c
+[7.248s] [ 70%] [32m[1mLinking CXX shared library libmsgs__rosidl_typesupport_fastrtps_c.so[0m
+[7.409s] [ 70%] Built target msgs__rosidl_typesupport_fastrtps_cpp
+[7.484s] [ 70%] Built target msgs__rosidl_typesupport_introspection_cpp
+[7.747s] [ 70%] Built target msgs__rosidl_typesupport_fastrtps_c
+[7.774s] [ 70%] Built target msgs
+[7.801s] [ 74%] [34m[1mGenerating Python code for ROS interfaces[0m
+[8.215s] [ 74%] Built target msgs__py
+[8.237s] [ 77%] [32mBuilding C object CMakeFiles/msgs__rosidl_generator_py.dir/rosidl_generator_py/msgs/msg/_joystick_s.c.o[0m
+[8.419s] [ 80%] [32m[1mLinking C shared library rosidl_generator_py/msgs/libmsgs__rosidl_generator_py.so[0m
+[8.673s] [ 80%] Built target msgs__rosidl_generator_py
+[8.693s] [ 90%] [32mBuilding C object CMakeFiles/msgs__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/msgs/_msgs_s.ep.rosidl_typesupport_c.c.o[0m
+[8.693s] [ 90%] [32mBuilding C object CMakeFiles/msgs__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/msgs/_msgs_s.ep.rosidl_typesupport_introspection_c.c.o[0m
+[8.693s] [ 90%] [32mBuilding C object CMakeFiles/msgs__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/msgs/_msgs_s.ep.rosidl_typesupport_fastrtps_c.c.o[0m
+[8.799s] [ 93%] [32m[1mLinking C shared library rosidl_generator_py/msgs/msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so[0m
+[8.802s] [ 96%] [32m[1mLinking C shared library rosidl_generator_py/msgs/msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so[0m
+[8.804s] [100%] [32m[1mLinking C shared library rosidl_generator_py/msgs/msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so[0m
+[9.022s] [100%] Built target msgs__rosidl_typesupport_introspection_c__pyext
+[9.022s] [100%] Built target msgs__rosidl_typesupport_c__pyext
+[9.091s] [100%] Built target msgs__rosidl_typesupport_fastrtps_c__pyext
+[9.105s] Invoked command in '/home/ziad/Zpicier/build/msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/ziad/Zpicier/build/msgs -- -j16 -l16
+[9.115s] Invoking command in '/home/ziad/Zpicier/build/msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/ziad/Zpicier/build/msgs
+[9.124s] -- Install configuration: ""
+[9.124s] -- Installing: /home/ziad/Zpicier/install/msgs/share/ament_index/resource_index/rosidl_interfaces/msgs
+[9.124s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs
+[9.125s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg
+[9.125s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/joystick.h
+[9.126s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/rosidl_generator_c__visibility_control.h
+[9.126s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail
+[9.126s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__type_support.h
+[9.126s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__struct.h
+[9.126s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__functions.h
+[9.126s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__functions.c
+[9.126s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/environment/library_path.sh
+[9.127s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/environment/library_path.dsv
+[9.127s] -- Installing: /home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_generator_c.so
+[9.128s] -- Set runtime path of "/home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_generator_c.so" to ""
+[9.128s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs
+[9.128s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg
+[9.129s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[9.129s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail
+[9.129s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__rosidl_typesupport_fastrtps_c.h
+[9.129s] -- Installing: /home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_typesupport_fastrtps_c.so
+[9.129s] -- Set runtime path of "/home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_typesupport_fastrtps_c.so" to ""
+[9.129s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs
+[9.129s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg
+[9.129s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail
+[9.130s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__type_support.c
+[9.130s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__rosidl_typesupport_introspection_c.h
+[9.130s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[9.130s] -- Installing: /home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_typesupport_introspection_c.so
+[9.130s] -- Set runtime path of "/home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_typesupport_introspection_c.so" to ""
+[9.131s] -- Installing: /home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_typesupport_c.so
+[9.131s] -- Set runtime path of "/home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_typesupport_c.so" to ""
+[9.132s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs
+[9.132s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg
+[9.132s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/rosidl_generator_cpp__visibility_control.hpp
+[9.133s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/joystick.hpp
+[9.133s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail
+[9.133s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__builder.hpp
+[9.133s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__struct.hpp
+[9.134s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__traits.hpp
+[9.134s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__type_support.hpp
+[9.134s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs
+[9.134s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg
+[9.134s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[9.134s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail
+[9.134s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__rosidl_typesupport_fastrtps_cpp.hpp
+[9.134s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/dds_fastrtps
+[9.134s] -- Installing: /home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_typesupport_fastrtps_cpp.so
+[9.135s] -- Set runtime path of "/home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_typesupport_fastrtps_cpp.so" to ""
+[9.135s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs
+[9.135s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg
+[9.135s] -- Up-to-date: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail
+[9.135s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__type_support.cpp
+[9.135s] -- Installing: /home/ziad/Zpicier/install/msgs/include/msgs/msgs/msg/detail/joystick__rosidl_typesupport_introspection_cpp.hpp
+[9.135s] -- Installing: /home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_typesupport_introspection_cpp.so
+[9.136s] -- Set runtime path of "/home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_typesupport_introspection_cpp.so" to ""
+[9.136s] -- Installing: /home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_typesupport_cpp.so
+[9.136s] -- Set runtime path of "/home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_typesupport_cpp.so" to ""
+[9.136s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/environment/pythonpath.sh
+[9.136s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/environment/pythonpath.dsv
+[9.136s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs-0.0.0-py3.10.egg-info
+[9.137s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs-0.0.0-py3.10.egg-info/PKG-INFO
+[9.137s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs-0.0.0-py3.10.egg-info/SOURCES.txt
+[9.137s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs-0.0.0-py3.10.egg-info/top_level.txt
+[9.138s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs-0.0.0-py3.10.egg-info/dependency_links.txt
+[9.138s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs
+[9.138s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msg
+[9.138s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msg/__init__.py
+[9.139s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msg/_joystick_s.c
+[9.139s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msg/_joystick.py
+[9.139s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/_msgs_s.ep.rosidl_typesupport_fastrtps_c.c
+[9.139s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/_msgs_s.ep.rosidl_typesupport_introspection_c.c
+[9.139s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/libmsgs__rosidl_generator_py.so
+[9.139s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/_msgs_s.ep.rosidl_typesupport_c.c
+[9.139s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/__init__.py
+[9.139s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[9.140s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[9.140s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[9.189s] Listing '/home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs'...
+[9.190s] Compiling '/home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/__init__.py'...
+[9.190s] Listing '/home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msg'...
+[9.190s] Compiling '/home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msg/__init__.py'...
+[9.190s] Compiling '/home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msg/_joystick.py'...
+[9.196s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[9.197s] -- Set runtime path of "/home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so" to ""
+[9.197s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[9.198s] -- Set runtime path of "/home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so" to ""
+[9.198s] -- Installing: /home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[9.198s] -- Set runtime path of "/home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages/msgs/msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so" to ""
+[9.198s] -- Installing: /home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_generator_py.so
+[9.199s] -- Set runtime path of "/home/ziad/Zpicier/install/msgs/lib/libmsgs__rosidl_generator_py.so" to ""
+[9.199s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/msg/Joystick.idl
+[9.199s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/msg/Joystick.msg
+[9.199s] -- Installing: /home/ziad/Zpicier/install/msgs/share/ament_index/resource_index/package_run_dependencies/msgs
+[9.200s] -- Installing: /home/ziad/Zpicier/install/msgs/share/ament_index/resource_index/parent_prefix_path/msgs
+[9.200s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/environment/ament_prefix_path.sh
+[9.200s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/environment/ament_prefix_path.dsv
+[9.201s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/environment/path.sh
+[9.201s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/environment/path.dsv
+[9.202s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/local_setup.bash
+[9.202s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/local_setup.sh
+[9.202s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/local_setup.zsh
+[9.203s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/local_setup.dsv
+[9.203s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/package.dsv
+[9.203s] -- Installing: /home/ziad/Zpicier/install/msgs/share/ament_index/resource_index/packages/msgs
+[9.204s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/export_msgs__rosidl_generator_cExport.cmake
+[9.204s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/export_msgs__rosidl_generator_cExport-noconfig.cmake
+[9.205s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/export_msgs__rosidl_typesupport_fastrtps_cExport.cmake
+[9.205s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/export_msgs__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[9.205s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/msgs__rosidl_typesupport_introspection_cExport.cmake
+[9.205s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/msgs__rosidl_typesupport_cExport.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/msgs__rosidl_typesupport_cExport-noconfig.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/export_msgs__rosidl_generator_cppExport.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/export_msgs__rosidl_typesupport_fastrtps_cppExport.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/export_msgs__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/msgs__rosidl_typesupport_introspection_cppExport.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/msgs__rosidl_typesupport_cppExport.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/msgs__rosidl_typesupport_cppExport-noconfig.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/export_msgs__rosidl_generator_pyExport.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/export_msgs__rosidl_generator_pyExport-noconfig.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/rosidl_cmake-extras.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/ament_cmake_export_include_directories-extras.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/ament_cmake_export_libraries-extras.cmake
+[9.206s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/ament_cmake_export_targets-extras.cmake
+[9.207s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[9.207s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/ament_cmake_export_dependencies-extras.cmake
+[9.207s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[9.208s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/msgsConfig.cmake
+[9.208s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/cmake/msgsConfig-version.cmake
+[9.209s] -- Installing: /home/ziad/Zpicier/install/msgs/share/msgs/package.xml
+[9.210s] Invoked command in '/home/ziad/Zpicier/build/msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/ziad/Zpicier/build/msgs

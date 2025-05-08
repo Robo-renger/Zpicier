@@ -5,7 +5,6 @@ import threading
 from concurrent.futures import TimeoutError as GRPCTimeoutError
 
 from data_contracts import joy_pb2, joy_pb2_grpc
-from utils.Configurator import Configurator
 from msgs.msg import Joystick
 import time
 class JoystickNode(Node):
@@ -13,7 +12,6 @@ class JoystickNode(Node):
         super().__init__('joystick_channel_node')
         self.mapped_buttons = {}
         self.lock = threading.Lock()
-        config = Configurator()
 
         # gRPC setup
         self.channel = None
@@ -54,12 +52,12 @@ class JoystickNode(Node):
 
         request = joy_pb2.JoystickRequest(
             buttons=button_data,
-            axis_x=0.0, axis_y= 1.0, axis_z=0.0,
+            axis_x=0.0, axis_y= 1.0,
             roll=0.0, pitch=0.0, yaw=0.0
         )
         try:
             response = self.stub.UpdateState(request)
-            self.get_logger().info(f"Sent joystick data | Status: {response.status}")
+            # self.get_logger().info(f"Sent joystick data | Status: {response.status}")
         except grpc.RpcError as e:
             self.grpc_connected = False
             self.get_logger().error(f"gRPC error: {e.details() if hasattr(e, 'details') else str(e)}")

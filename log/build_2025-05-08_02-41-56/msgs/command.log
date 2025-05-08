@@ -1,0 +1,6 @@
+Invoking command in '/home/ziad/Zpicier/build/msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ziad/Zpicier/ros/msgs -DCMAKE_INSTALL_PREFIX=/home/ziad/Zpicier/install/msgs
+Invoked command in '/home/ziad/Zpicier/build/msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ziad/Zpicier/ros/msgs -DCMAKE_INSTALL_PREFIX=/home/ziad/Zpicier/install/msgs
+Invoking command in '/home/ziad/Zpicier/build/msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/ziad/Zpicier/build/msgs -- -j16 -l16
+Invoked command in '/home/ziad/Zpicier/build/msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/ziad/Zpicier/build/msgs -- -j16 -l16
+Invoking command in '/home/ziad/Zpicier/build/msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/ziad/Zpicier/build/msgs
+Invoked command in '/home/ziad/Zpicier/build/msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/ziad/Zpicier/build/msgs

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "msgs__py",
+		"source" : "/home/ziad/Zpicier/build/msgs/msgs__py"
+	}
+}

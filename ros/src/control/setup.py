@@ -23,6 +23,7 @@ setup(
     entry_points={
         'console_scripts': [
             'imu_node = nodes.IMUNode:main',
+            'depth_node = nodes.DepthNode:main',
             'joystick_channel_node = nodes.JoystickNode:main',
             'gui_streamer = nodes.GUIStreamingNode:main',
         ],

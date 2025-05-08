@@ -1,0 +1,115 @@
+[1.399s] Invoking command in '/home/ziad/Zpicier/ros/src/control': AMENT_PREFIX_PATH=/home/ziad/Zpicier/install/msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/ziad/Zpicier/install/msgs LD_LIBRARY_PATH=/home/ziad/Zpicier/install/msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/ziad/Zpicier/build/control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ziad/Zpicier/install/control/lib/python3.10/site-packages:/home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/control build --build-base /home/ziad/Zpicier/build/control/build install --record /home/ziad/Zpicier/build/control/install.log --single-version-externally-managed install_data
+[1.796s] running egg_info
+[1.798s] creating ../../../build/control/control.egg-info
+[1.799s] writing ../../../build/control/control.egg-info/PKG-INFO
+[1.801s] writing dependency_links to ../../../build/control/control.egg-info/dependency_links.txt
+[1.802s] writing entry points to ../../../build/control/control.egg-info/entry_points.txt
+[1.802s] writing requirements to ../../../build/control/control.egg-info/requires.txt
+[1.803s] writing top-level names to ../../../build/control/control.egg-info/top_level.txt
+[1.804s] writing manifest file '../../../build/control/control.egg-info/SOURCES.txt'
+[1.808s] reading manifest file '../../../build/control/control.egg-info/SOURCES.txt'
+[1.810s] writing manifest file '../../../build/control/control.egg-info/SOURCES.txt'
+[1.811s] running build
+[1.812s] running build_py
+[1.812s] creating /home/ziad/Zpicier/build/control/build
+[1.813s] creating /home/ziad/Zpicier/build/control/build/lib
+[1.813s] creating /home/ziad/Zpicier/build/control/build/lib/core
+[1.814s] copying core/Dispatcher.py -> /home/ziad/Zpicier/build/control/build/lib/core
+[1.814s] copying core/__init__.py -> /home/ziad/Zpicier/build/control/build/lib/core
+[1.815s] creating /home/ziad/Zpicier/build/control/build/lib/simulation_services
+[1.816s] copying simulation_services/SimIMU.py -> /home/ziad/Zpicier/build/control/build/lib/simulation_services
+[1.816s] copying simulation_services/__init__.py -> /home/ziad/Zpicier/build/control/build/lib/simulation_services
+[1.817s] copying simulation_services/SIMDepth.py -> /home/ziad/Zpicier/build/control/build/lib/simulation_services
+[1.817s] creating /home/ziad/Zpicier/build/control/build/lib/services
+[1.818s] copying services/Depth.py -> /home/ziad/Zpicier/build/control/build/lib/services
+[1.819s] copying services/IMU.py -> /home/ziad/Zpicier/build/control/build/lib/services
+[1.820s] copying services/__init__.py -> /home/ziad/Zpicier/build/control/build/lib/services
+[1.821s] creating /home/ziad/Zpicier/build/control/build/lib/nodes
+[1.821s] copying nodes/GUIStreamingNode.py -> /home/ziad/Zpicier/build/control/build/lib/nodes
+[1.821s] copying nodes/ DepthNode.py -> /home/ziad/Zpicier/build/control/build/lib/nodes
+[1.822s] copying nodes/__init__.py -> /home/ziad/Zpicier/build/control/build/lib/nodes
+[1.823s] copying nodes/IMUNode.py -> /home/ziad/Zpicier/build/control/build/lib/nodes
+[1.823s] copying nodes/JoystickNode.py -> /home/ziad/Zpicier/build/control/build/lib/nodes
+[1.823s] creating /home/ziad/Zpicier/build/control/build/lib/interfaces
+[1.824s] copying interfaces/IBNO085.py -> /home/ziad/Zpicier/build/control/build/lib/interfaces
+[1.825s] copying interfaces/__init__.py -> /home/ziad/Zpicier/build/control/build/lib/interfaces
+[1.826s] copying interfaces/IDepthSensor.py -> /home/ziad/Zpicier/build/control/build/lib/interfaces
+[1.828s] creating /home/ziad/Zpicier/build/control/build/lib/data_contracts
+[1.829s] copying data_contracts/depth_pb2_grpc.py -> /home/ziad/Zpicier/build/control/build/lib/data_contracts
+[1.830s] copying data_contracts/depth_pb2.py -> /home/ziad/Zpicier/build/control/build/lib/data_contracts
+[1.831s] copying data_contracts/imu_pb2_grpc.py -> /home/ziad/Zpicier/build/control/build/lib/data_contracts
+[1.832s] copying data_contracts/__init__.py -> /home/ziad/Zpicier/build/control/build/lib/data_contracts
+[1.832s] copying data_contracts/joy_pb2.py -> /home/ziad/Zpicier/build/control/build/lib/data_contracts
+[1.833s] copying data_contracts/imu_pb2.py -> /home/ziad/Zpicier/build/control/build/lib/data_contracts
+[1.833s] copying data_contracts/joy_pb2_grpc.py -> /home/ziad/Zpicier/build/control/build/lib/data_contracts
+[1.834s] running install
+[1.835s] running install_lib
+[1.837s] creating /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/core
+[1.838s] copying /home/ziad/Zpicier/build/control/build/lib/core/Dispatcher.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/core
+[1.839s] copying /home/ziad/Zpicier/build/control/build/lib/core/__init__.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/core
+[1.840s] creating /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/simulation_services
+[1.841s] copying /home/ziad/Zpicier/build/control/build/lib/simulation_services/SimIMU.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/simulation_services
+[1.841s] copying /home/ziad/Zpicier/build/control/build/lib/simulation_services/__init__.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/simulation_services
+[1.841s] copying /home/ziad/Zpicier/build/control/build/lib/simulation_services/SIMDepth.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/simulation_services
+[1.841s] creating /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/services
+[1.842s] copying /home/ziad/Zpicier/build/control/build/lib/services/Depth.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/services
+[1.842s] copying /home/ziad/Zpicier/build/control/build/lib/services/IMU.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/services
+[1.843s] copying /home/ziad/Zpicier/build/control/build/lib/services/__init__.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/services
+[1.844s] creating /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/nodes
+[1.845s] copying /home/ziad/Zpicier/build/control/build/lib/nodes/GUIStreamingNode.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/nodes
+[1.845s] copying /home/ziad/Zpicier/build/control/build/lib/nodes/ DepthNode.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/nodes
+[1.847s] copying /home/ziad/Zpicier/build/control/build/lib/nodes/__init__.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/nodes
+[1.849s] copying /home/ziad/Zpicier/build/control/build/lib/nodes/IMUNode.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/nodes
+[1.852s] copying /home/ziad/Zpicier/build/control/build/lib/nodes/JoystickNode.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/nodes
+[1.852s] creating /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/interfaces
+[1.853s] copying /home/ziad/Zpicier/build/control/build/lib/interfaces/IBNO085.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/interfaces
+[1.853s] copying /home/ziad/Zpicier/build/control/build/lib/interfaces/__init__.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/interfaces
+[1.853s] copying /home/ziad/Zpicier/build/control/build/lib/interfaces/IDepthSensor.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/interfaces
+[1.853s] creating /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts
+[1.854s] copying /home/ziad/Zpicier/build/control/build/lib/data_contracts/depth_pb2_grpc.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts
+[1.854s] copying /home/ziad/Zpicier/build/control/build/lib/data_contracts/depth_pb2.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts
+[1.854s] copying /home/ziad/Zpicier/build/control/build/lib/data_contracts/imu_pb2_grpc.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts
+[1.855s] copying /home/ziad/Zpicier/build/control/build/lib/data_contracts/__init__.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts
+[1.855s] copying /home/ziad/Zpicier/build/control/build/lib/data_contracts/joy_pb2.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts
+[1.856s] copying /home/ziad/Zpicier/build/control/build/lib/data_contracts/imu_pb2.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts
+[1.856s] copying /home/ziad/Zpicier/build/control/build/lib/data_contracts/joy_pb2_grpc.py -> /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts
+[1.856s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/core/Dispatcher.py to Dispatcher.cpython-310.pyc
+[1.857s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/core/__init__.py to __init__.cpython-310.pyc
+[1.857s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/simulation_services/SimIMU.py to SimIMU.cpython-310.pyc
+[1.858s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/simulation_services/__init__.py to __init__.cpython-310.pyc
+[1.858s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/simulation_services/SIMDepth.py to SIMDepth.cpython-310.pyc
+[1.859s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/services/Depth.py to Depth.cpython-310.pyc
+[1.860s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/services/IMU.py to IMU.cpython-310.pyc
+[1.863s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/services/__init__.py to __init__.cpython-310.pyc
+[1.865s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/nodes/GUIStreamingNode.py to GUIStreamingNode.cpython-310.pyc
+[1.866s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/nodes/ DepthNode.py to  DepthNode.cpython-310.pyc
+[1.868s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/nodes/__init__.py to __init__.cpython-310.pyc
+[1.868s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/nodes/IMUNode.py to IMUNode.cpython-310.pyc
+[1.869s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/nodes/JoystickNode.py to JoystickNode.cpython-310.pyc
+[1.871s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/interfaces/IBNO085.py to IBNO085.cpython-310.pyc
+[1.873s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/interfaces/__init__.py to __init__.cpython-310.pyc
+[1.874s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/interfaces/IDepthSensor.py to IDepthSensor.cpython-310.pyc
+[1.874s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts/depth_pb2_grpc.py to depth_pb2_grpc.cpython-310.pyc
+[1.877s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts/depth_pb2.py to depth_pb2.cpython-310.pyc
+[1.877s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts/imu_pb2_grpc.py to imu_pb2_grpc.cpython-310.pyc
+[1.879s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts/__init__.py to __init__.cpython-310.pyc
+[1.880s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts/joy_pb2.py to joy_pb2.cpython-310.pyc
+[1.884s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts/imu_pb2.py to imu_pb2.cpython-310.pyc
+[1.885s] byte-compiling /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/data_contracts/joy_pb2_grpc.py to joy_pb2_grpc.cpython-310.pyc
+[1.887s] running install_data
+[1.887s] creating /home/ziad/Zpicier/install/control/share/ament_index
+[1.889s] creating /home/ziad/Zpicier/install/control/share/ament_index/resource_index
+[1.889s] creating /home/ziad/Zpicier/install/control/share/ament_index/resource_index/packages
+[1.889s] copying resource/control -> /home/ziad/Zpicier/install/control/share/ament_index/resource_index/packages
+[1.890s] copying package.xml -> /home/ziad/Zpicier/install/control/share/control
+[1.890s] creating /home/ziad/Zpicier/install/control/share/control/launch
+[1.890s] copying launch/run.py -> /home/ziad/Zpicier/install/control/share/control/launch
+[1.891s] running install_egg_info
+[1.894s] Copying ../../../build/control/control.egg-info to /home/ziad/Zpicier/install/control/lib/python3.10/site-packages/control-0.0.0-py3.10.egg-info
+[1.896s] running install_scripts
+[1.960s] Installing depth_node script to /home/ziad/Zpicier/install/control/lib/control
+[1.961s] Installing gui_streamer script to /home/ziad/Zpicier/install/control/lib/control
+[1.961s] Installing imu_node script to /home/ziad/Zpicier/install/control/lib/control
+[1.962s] Installing joystick_channel_node script to /home/ziad/Zpicier/install/control/lib/control
+[1.964s] writing list of installed files to '/home/ziad/Zpicier/build/control/install.log'
+[2.032s] Invoked command in '/home/ziad/Zpicier/ros/src/control' returned '0': AMENT_PREFIX_PATH=/home/ziad/Zpicier/install/msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/ziad/Zpicier/install/msgs LD_LIBRARY_PATH=/home/ziad/Zpicier/install/msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/ziad/Zpicier/build/control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ziad/Zpicier/install/control/lib/python3.10/site-packages:/home/ziad/Zpicier/install/msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/control build --build-base /home/ziad/Zpicier/build/control/build install --record /home/ziad/Zpicier/build/control/install.log --single-version-externally-managed install_data

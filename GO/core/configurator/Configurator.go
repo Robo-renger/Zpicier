@@ -47,10 +47,11 @@ func setBasePath(basePath string) {
 
 }
 func getConfigPath() (string, error) {
-	dir, err := os.Getwd()
+	exePath, err := os.Executable()
 	if err != nil {
 		return "", err
 	}
+	dir := filepath.Dir(exePath)
 
 	for {
 		configPath := filepath.Join(dir, "config")
@@ -68,6 +69,7 @@ func getConfigPath() (string, error) {
 		dir = parent
 	}
 }
+
 // Init loads all queued YAML files into a merged config
 func Init() error {
 	var err error

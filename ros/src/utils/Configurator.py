@@ -15,7 +15,7 @@ class Configurator():
     def __init__(self):
         self.__configFile = ''
      
-    def __getProjectRoot(self):
+    def getProjectRoot(self):
         # Traverse upward until we find a directory with /config folder
         current = pathlib.Path(__file__).resolve()
         for parent in current.parents:

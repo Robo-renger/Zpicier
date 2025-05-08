@@ -34,8 +34,15 @@ type NavigationNode struct {
 	pid_heave *PID.PIDController
 	pid_heave_live *PID.PIDController
 	imu *dtos.IMU
+	depth *dtos.Depth
 }
 var(
+	x_out float64
+	y_out float64
+	heave_out float64
+	roll_out float64
+	pitch_out float64
+	yaw_out float64
 	activePID bool
 	manualSetPoint bool
 	fix_heading bool
@@ -61,6 +68,7 @@ func NewNode() *NavigationNode {
 		pid_heave: PID.NewPIDController(configurator.Get("heave_KP"), configurator.Get("heave_KI"), configurator.Get("heave_KD")),
 		pid_heave_live: PID.NewPIDController(configurator.Get("live_heave_KP"), configurator.Get("live_heave_KI"), configurator.Get("live_heave_KD")),
 		imu: dtos.GetIMUInstance(),
+		depth: dtos.GetDepthInstance(),
 	}
 }
 func (n *NavigationNode) Init() error {
@@ -71,7 +79,6 @@ func (n *NavigationNode) Init() error {
 	fix_heave = false 
 	is_rotating = false 
 	capture = false 
-	// neutralPitch = n.calibratePitchNeutral()
 	n.thrusters = map[string]*thruster.Thruster{
 		"front_right": thruster.NewThruster(configurator.Get("FRONT_RIGHT_PCA_CHANNEL"), 1100, 1900, 135),
 		"front_left":  thruster.NewThruster(configurator.Get("FRONT_LEFT_PCA_CHANNEL"), 1100, 1900, 45),
@@ -80,6 +87,8 @@ func (n *NavigationNode) Init() error {
 		"back":        thruster.NewThruster(configurator.Get("BACK_PCA_CHANNEL"), 1100, 1900, 90),
 		"front":       thruster.NewThruster(configurator.Get("FRONT_PCA_CHANNEL"), 1100, 1900, 90),
 	}
+	n.calibratePitchNeutral()
+	fmt.Println("Neutral pitch calibrated to:", neutralPitch)
 	n.navigation.SetThrusters(n.thrusters)
 	return nil
 }
@@ -121,8 +130,36 @@ func (n *NavigationNode) startNavigationLoop() {
 				time.Sleep(10 * time.Millisecond)
 				continue
 			}
+			if !n.joystick.IsRestYawAxis()  {
+				n.pid_yaw.Setpoint = n.imu.Yaw
+			}
 
-			n.navigation.Navigate(n.x, n.y, n.z, n.roll, n.pitch, n.yaw)
+			if !n.joystick.IsRestPitchAxis() {
+				n.pid_pitch.Setpoint = neutralPitch
+				n.pid_pitch_horizontal.Setpoint = neutralPitch
+				n.pid_pitch_vertical.Setpoint = neutralPitch
+			}else{
+				n.pid_pitch.Setpoint = n.imu.Pitch
+				n.pid_pitch_horizontal.Setpoint = n.imu.Pitch
+				n.pid_pitch_vertical.Setpoint = n.imu.Pitch
+			}
+			if !n.joystick.IsRestHeaveAxis(n.z) {
+				n.pid_heave.Setpoint = n.depth.Depth
+				n.pid_heave_live.Setpoint = n.depth.Depth
+			}
+			if activePID && n.joystick.IsRest(n.z) {
+				n.stabalizeAtRest()
+			}else if activePID && n.joystick.IsMovingHorizontally() && n.joystick.IsRestAxes(n.z) {
+				n.stabalizeAtHorizontalMovement()
+
+			}else if activePID && n.joystick.IsMovingVertically(n.z) && (n.joystick.IsRestYawAxis() && n.joystick.IsRestPitchAxis()) {
+				n.stabalizeAtVerticalMovement()
+			}else if activePID && n.joystick.IsRestYawAxis() && (n.joystick.IsRestPitchAxis() && n.joystick.IsRestHeaveAxis(n.z)) {
+				n.stabalizeWhileHeading()
+			}else{
+				n.manualNavigation()
+			}
+			n.navigation.Navigate(x_out, y_out, pitch_out, n.roll, heave_out, yaw_out)
 			time.Sleep(10 * time.Millisecond)
 		}
 	}
@@ -136,18 +173,83 @@ func (n *NavigationNode) Run() {
 	}
 
 	go n.handle()
-
-	// Simulate graceful shutdown after 10 seconds for testing
-	time.Sleep(10 * time.Second)
 	n.Stop()
 }
 func (n *NavigationNode) Stop() {
 	n.cancel()
 }
 
+func (n *NavigationNode) manualNavigation() {
+	yaw_out = n.yaw
+	heave_out = n.z
+	pitch_out = n.pitch
+	x_out = n.x
+	y_out = n.y
+}
+
 func (n *NavigationNode) stabalizeAtRest() {
-	yaw_output := n.pid_yaw.Update(n.imu.Yaw)
-	pitch_output := n.pid_pitch.Update(n.imu.Pitch)
-	heave_output := n.pid_heave.Update(n.depth)
-	
+	yaw_out = n.pid_yaw.Stabilize(n.imu.Yaw)
+	pitch_out = n.pid_pitch.Stabilize(n.imu.Pitch)
+	heave_out = n.pid_heave.Stabilize(n.depth.Depth)
+
+	x_out = n.x
+	y_out = n.y
+}
+func (n *NavigationNode) stabalizeAtHorizontalMovement() {
+	yaw_out = n.pid_yaw.Stabilize(n.imu.Yaw)
+	pitch_out = n.pid_pitch.Stabilize(n.imu.Pitch)
+	heave_out = n.pid_heave.Stabilize(n.depth.Depth)
+
+	x_out = n.x
+	y_out = n.y
+}
+func (n *NavigationNode) stabalizeAtVerticalMovement() {
+	yaw_out = n.pid_yaw.Stabilize(n.imu.Yaw)
+	pitch_out = n.pid_pitch.Stabilize(n.imu.Pitch)
+	heave_out = n.z
+
+	x_out = n.x
+	y_out = n.y
+}	
+func (n *NavigationNode) stabalizeWhileHeading() {
+	pitch_out = n.pid_pitch.Stabilize(n.imu.Pitch)
+	heave_out = n.pid_heave.Stabilize(n.depth.Depth)
+
+	x_out = n.x
+	y_out = n.y
+}
+
+func (n *NavigationNode) calibratePitchNeutral() {
+	readings := make([]float64, 0)
+	maxCalibrationTime := 10 * time.Second
+	start := time.Now()
+
+	for time.Since(start) < maxCalibrationTime {
+		if n.imu == nil {
+			fmt.Println("IMU sensor not initialized, waiting...")
+		} else {
+			readings = append(readings, n.imu.Pitch)
+		}
+		time.Sleep(100 * time.Millisecond)
+		if time.Since(start) >= 5*time.Second && len(readings) == 0 {
+			// After 5s of trying, still no data
+			neutralPitch = -6.7
+			fmt.Println("Failed to get pitch data, using fallback.")
+			return
+		}
+	}
+
+	if len(readings) == 0 {
+		neutralPitch = -6.7
+		fmt.Println("No valid readings, using fallback.")
+		return
+	}
+
+	neutralPitch = 0.0
+	for _, reading := range readings {
+		neutralPitch += reading
+	}
+	neutralPitch /= float64(len(readings))
+	fmt.Println("Calibrated readings:", readings)
+	fmt.Println("Final neutral pitch:", neutralPitch)
 }

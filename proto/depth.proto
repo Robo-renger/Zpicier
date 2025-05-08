@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package depth;
+option go_package = "zpicier/src/GO/pb;depth";
+
+service DepthService {
+  rpc SetDepth (DepthRequest) returns (DepthResponse);
+}
+
+message DepthRequest {
+  double depth = 1;
+  double pressure  = 2;
+}
+
+message DepthResponse {
+  string status = 1;
+}

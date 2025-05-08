@@ -10,12 +10,12 @@ type IMU struct {
 
 var (
 	imuInstance *IMU
-	once        sync.Once
+	onceIMU        sync.Once
 )
 
 // GetInstance returns the singleton IMU instance
 func GetIMUInstance() *IMU {
-	once.Do(func() {
+	onceIMU.Do(func() {
 		imuInstance = &IMU{}
 	})
 	return imuInstance

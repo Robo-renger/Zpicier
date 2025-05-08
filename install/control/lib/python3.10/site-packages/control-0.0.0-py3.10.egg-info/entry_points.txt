@@ -1,0 +1,6 @@
+[console_scripts]
+depth_node = nodes.DepthNode:main
+gui_streamer = nodes.GUIStreamingNode:main
+imu_node = nodes.IMUNode:main
+joystick_channel_node = nodes.JoystickNode:main
+

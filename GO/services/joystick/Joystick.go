@@ -1,7 +1,7 @@
 package joystick
 
 import (
-	"fmt"
+	"math"
 	"strings"
 	"sync"
 	"zpicier/core/configurator"
@@ -19,6 +19,7 @@ type Joystick struct {
 var (
 	instance *Joystick
 	once     sync.Once
+	deadZone = 0.09
 )
 
 // GetInstance returns the global singleton Joystick
@@ -28,7 +29,6 @@ func GetInstance() *Joystick {
 		for k, v := range configurator.GetAll() {
 			if strings.HasPrefix(k, "BUTTON_") {
 				k = strings.ToLower(k)
-				fmt.Println("Adding button mapping:", k, "->", v)
 				mappings[k] = v
 			}
 		}
@@ -82,4 +82,30 @@ func (j *Joystick) GetAxes() (x, y, pitch, yaw, roll float64) {
 	defer j.mu.RUnlock()
 
 	return j.axisX, j.axisY,  j.axisRoll, j.axisPitch, j.axisYaw
+}
+
+func (j *Joystick) IsRest(z_axis float64) bool {
+	return (math.Abs(j.axisX) <= deadZone && math.Abs(j.axisY)<= deadZone &&
+		    math.Abs(z_axis) <= deadZone && math.Abs(j.axisPitch) <= deadZone &&
+		    math.Abs(j.axisYaw) <= deadZone)
+}
+func (j *Joystick) IsRestYawAxis() bool {
+	return math.Abs(j.axisYaw) <= deadZone
+}
+func (j *Joystick) IsRestPitchAxis() bool {
+	return math.Abs(j.axisPitch) <= deadZone
+}
+func (j *Joystick) IsRestHeaveAxis(z_axis float64) bool {
+	return math.Abs(z_axis) <= deadZone
+}
+func (j *Joystick) IsRestAxes(z_axis float64) bool {
+	return  (j.IsRestYawAxis() && j.IsRestPitchAxis() && j.IsRestHeaveAxis(z_axis))
+}
+
+func (j *Joystick) IsMovingHorizontally() bool{
+	return (math.Abs(j.axisX) > deadZone || math.Abs(j.axisY) > deadZone)
+}
+
+func (j *Joystick) IsMovingVertically(z_axis float64) bool {
+	return (math.Abs(z_axis) > deadZone)
 }

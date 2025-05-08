@@ -2,7 +2,6 @@ package servers
 
 import (
 	"context"
-	"log"
 	"sync"
 
 	joy_pb "zpicier/pb/joy"
@@ -51,8 +50,8 @@ func (s *JoyServer) UpdateState(ctx context.Context, req *joy_pb.JoystickRequest
 	s.joystick.UpdateButtons(s.buttons)
 	s.joystick.UpdateAxes(s.axes.X, s.axes.Y, s.axes.Z, s.axes.Roll, s.axes.Pitch, s.axes.Yaw)
 
-	log.Printf("[Joystick] Buttons: %+v | Axes: X=%.2f Y=%.2f Z=%.2f Roll=%.2f Pitch=%.2f Yaw=%.2f",
-		s.buttons, s.axes.X, s.axes.Y, s.axes.Z, s.axes.Roll, s.axes.Pitch, s.axes.Yaw)
+	// log.Printf("[Joystick] Buttons: %+v | Axes: X=%.2f Y=%.2f Z=%.2f Roll=%.2f Pitch=%.2f Yaw=%.2f",
+	// 	s.buttons, s.axes.X, s.axes.Y, s.axes.Z, s.axes.Roll, s.axes.Pitch, s.axes.Yaw)
 
 	return &joy_pb.JoystickResponse{Status: "OK"}, nil
 }

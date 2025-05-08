@@ -60,10 +60,11 @@ func Get(key string) string {
 
 // findProjectRoot traverses upward until it finds .env
 func findProjectRoot() (string, error) {
-	dir, err := os.Getwd()
+	exePath, err := os.Executable()
 	if err != nil {
 		return "", err
 	}
+	dir := filepath.Dir(exePath)
 
 	for {
 		envPath := filepath.Join(dir, ".env")
@@ -76,9 +77,9 @@ func findProjectRoot() (string, error) {
 		}
 		dir = parent
 	}
-	print("a7a")
-	return "", fmt.Errorf(".env not found in any parent directory")
+	return "", fmt.Errorf(".env not found near executable")
 }
+
 
 // readEnvFile reads KEY=VAL lines from a file
 func readEnvFile(path string) (map[string]string, error) {
