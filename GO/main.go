@@ -28,11 +28,13 @@ func main() {
 		fmt.Printf("\nReceived signal: %s, exiting...\n", sig)
 		os.Exit(0)
 	}()
+	// End of signal handling
 
 	// Initialize configurator and environment parameters
 	configurator.AddConfigPath("config/joystick_buttons.yaml")
 	configurator.AddConfigPath("config/hardware_pins.yaml")
 	configurator.AddConfigPath("config/pid_ks.yaml")
+	configurator.AddConfigPath("config/changeable_modules.yaml")
 	EnvParams.Init()
 	EnvParams.Get("ENV")
 	if err := configurator.Init(); err != nil {
@@ -41,7 +43,6 @@ func main() {
 	// End of initialization
 	
 	var wg sync.WaitGroup
-	nodeManager := nodemanager.NewNodeManager(&wg) 
 
 	// Register gRPC server
 	wg.Add(1)
@@ -54,16 +55,24 @@ func main() {
 		}
 
 		grpcServer := grpc.NewServer()
+		
+		// Register all services
 		serverRegistery.RegisterAll(grpcServer)
+		// End of service registration
 
 		fmt.Println("gRPC server running on :50051")
 		if err := grpcServer.Serve(lis); err != nil {
 			log.Fatalf("gRPC serve error: %v", err)
 		}
 	}()
+	// End of gRPC server registration
 
+	// Register and run all nodes
+	nodeManager := nodemanager.NewNodeManager(&wg)
 	nodeManager.RegisterAll()
 	nodeManager.RunAll()
+	// End of node registration and running
+
 
 	wg.Wait()
 }

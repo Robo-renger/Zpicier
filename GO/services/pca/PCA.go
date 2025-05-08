@@ -97,7 +97,7 @@ func (p *PCA) PWMWrite(channel int, microseconds float64) error {
 		return fmt.Errorf("channel must be between 0 and 15")
 	}
 	if p.simulationMode {
-		fmt.Printf("[Simulation Mode] Writing %.2f us to channel %d\n", microseconds, channel)
+		fmt.Printf("[Simulation Mode PCA (GO)] Writing %.2f us to channel %d\n", microseconds, channel)
 		return nil
 	}
 	duty := p.microsecondsToDuty(microseconds)

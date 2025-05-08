@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package pwm;
+option go_package = "zpicier/src/GO/pb;pwm";
+
+// Messages
+message GetPWMRequest {}
+
+message PWMEntry {
+  int32 channel = 1;
+  double microseconds = 2;
+}
+
+message PWMValues {
+  repeated PWMEntry values = 1;
+}
+
+service PWMService {
+  rpc GetPWM (GetPWMRequest) returns (PWMValues);
+}

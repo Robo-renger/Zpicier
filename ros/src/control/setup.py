@@ -26,6 +26,7 @@ setup(
             'depth_node = nodes.DepthNode:main',
             'joystick_channel_node = nodes.JoystickNode:main',
             'gui_streamer = nodes.GUIStreamingNode:main',
+            'pwm_client_node = nodes.PWMNode:main',
         ],
     },
 )

@@ -1,7 +1,6 @@
 package navigation
 
 import (
-	"fmt"
 	"zpicier/services/thruster"
 	"zpicier/services/vectorizer"
 )
@@ -24,12 +23,13 @@ func (n *Navigation) SetThrusters(thrusters map[string]*thruster.Thruster) {
 }
 
 func (n *Navigation) Navigate(x, y, z, roll, pitch, yaw float64) {
+	// fmt.Println("Navigating with inputs:", x, y, z, roll, pitch, yaw)
 	vectorized := n.Vectorizer.Vectorize(x, y, z, roll, pitch, yaw)
 	if vectorized != nil {
-		fmt.Println("Vectorized values:", vectorized)
+		// fmt.Println("Vectorized values:", vectorized)
 		for label, thruster := range n.thrusters {
 			if value, exists := vectorized[label]; exists {
-				thruster.Output(int(value))
+				thruster.Drive(int(value))
 			}
 		}
 	}

@@ -3,7 +3,7 @@ package thruster
 import (
 	"log"
 	"strconv"
-	PCA "zpicier/services/pca"
+	pwmdriver "zpicier/services/pwm_driver"
 	smoother "zpicier/services/smoother"
 )
 
@@ -13,7 +13,7 @@ type Thruster struct {
 	Min_value int
 	Max_value int
 	Current_value int
-	pwmDriver *PCA.PCA
+	pwmDriver *pwmdriver.PWMDriver
 	smoother *smoother.Smoother
 }
 
@@ -39,6 +39,7 @@ func NewThruster(channel interface{}, min_value int, max_value int, angle int) *
 		Current_value: int((max_value+min_value)/2),
 		smoother: smoother.NewSmoother(),
 		Angle: angle,
+		pwmDriver: pwmdriver.NewPWMDriver(),
 	}
 }
 
@@ -52,12 +53,6 @@ func (t *Thruster) ensureValue(value int) int {
 }
 
 func (t * Thruster) Output(value int) {
-	if t.pwmDriver == nil {
-		t.pwmDriver = PCA.GetInstance(50)
-	}
-	if t.pwmDriver == nil {
-		return
-	}
 	t.pwmDriver.PWMWrite(t.Channel, float64(t.ensureValue(value)))
 }
 

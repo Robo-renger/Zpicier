@@ -23,5 +23,13 @@ class Dispatcher:
         else:
             from services.Depth import DepthSensor
             return DepthSensor()
+    @staticmethod
+    def getPWMDriver():
+        if EnvParams().ENV == "SIMULATION":
+            from simulation_services.SimPCA import SimPCA
+            return SimPCA()
+        else:
+            from services.PCA import PCA
+            return PCA.getInst()
     
     

@@ -28,6 +28,12 @@ def generate_launch_description():
         ),
         Node(
             package='control',
+            executable='pwm_client_node',
+            name='pwm_client_node',
+            output='screen'
+        ),
+        Node(
+            package='control',
             executable='gui_streamer',
             name='gui_streamer',
             output='screen'

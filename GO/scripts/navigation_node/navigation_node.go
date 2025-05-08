@@ -87,9 +87,27 @@ func (n *NavigationNode) Init() error {
 		"back":        thruster.NewThruster(configurator.Get("BACK_PCA_CHANNEL"), 1100, 1900, 90),
 		"front":       thruster.NewThruster(configurator.Get("FRONT_PCA_CHANNEL"), 1100, 1900, 90),
 	}
-	n.calibratePitchNeutral()
+	// n.calibratePitchNeutral()
 	fmt.Println("Neutral pitch calibrated to:", neutralPitch)
 	n.navigation.SetThrusters(n.thrusters)
+	n.pid_heave.MinOutput = -1 
+	n.pid_heave.MaxOutput = 1
+
+	n.pid_heave_live.MinOutput = -1
+	n.pid_heave_live.MaxOutput = 1
+
+	n.pid_yaw.MinOutput = -1
+	n.pid_yaw.MaxOutput = 1
+
+	n.pid_pitch.MinOutput = -1
+	n.pid_pitch.MaxOutput = 1
+
+	n.pid_pitch_horizontal.MinOutput = -1
+	n.pid_pitch_horizontal.MaxOutput = 1
+	
+	n.pid_pitch_vertical.MinOutput = -1
+	n.pid_pitch_vertical.MaxOutput = 1
+
 	return nil
 }
 func (n *NavigationNode) handle() {
@@ -173,7 +191,6 @@ func (n *NavigationNode) Run() {
 	}
 
 	go n.handle()
-	n.Stop()
 }
 func (n *NavigationNode) Stop() {
 	n.cancel()
@@ -251,5 +268,5 @@ func (n *NavigationNode) calibratePitchNeutral() {
 	}
 	neutralPitch /= float64(len(readings))
 	fmt.Println("Calibrated readings:", readings)
-	fmt.Println("Final neutral pitch:", neutralPitch)
+	fmt.Println("Final neutral pitch value:", neutralPitch)
 }

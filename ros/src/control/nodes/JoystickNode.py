@@ -52,7 +52,7 @@ class JoystickNode(Node):
 
         request = joy_pb2.JoystickRequest(
             buttons=button_data,
-            axis_x=0.0, axis_y= 1.0,
+            axis_x=1.0, axis_y= 1.0,
             roll=0.0, pitch=0.0, yaw=0.0
         )
         try:
