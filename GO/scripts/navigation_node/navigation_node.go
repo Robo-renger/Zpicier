@@ -190,7 +190,7 @@ func (n *NavigationNode) startNavigationLoop() {
 				n.lastState = currentState
 			}
 			n.stabalizeAtVerticalMovement()
-		} else if activePID && n.joystick.IsRestYawAxis() && n.joystick.IsRestPitchAxis() && n.joystick.IsRestHeaveAxis(n.z) {
+		} else if activePID && !n.joystick.IsRestYawAxis() && n.joystick.IsRestPitchAxis() && n.joystick.IsRestHeaveAxis(n.z) {
 			currentState = "heading"
 			if n.lastState != currentState {
 				fmt.Println("Stabilizing while heading")
