@@ -24,7 +24,7 @@ class SimPCA:
         
         duty_cycle = self.microsecondsToDutycycle(microseconds)
         self.channels[channel] = duty_cycle
-        print(f"[SIM] Channel {channel} set to {microseconds}us (duty {duty_cycle})")
+        # print(f"[SIM] Channel {channel} set to {microseconds}us (duty {duty_cycle})")
 
     def stopAll(self) -> None:
         for i in range(16):

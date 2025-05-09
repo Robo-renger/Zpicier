@@ -35,6 +35,8 @@ type NavigationNode struct {
 	pid_heave_live *PID.PIDController
 	imu *dtos.IMU
 	depth *dtos.Depth
+	lastState string
+
 }
 var(
 	x_out float64
@@ -140,47 +142,73 @@ func (n *NavigationNode) startJoystickReader() {
 func (n *NavigationNode) startNavigationLoop() {
 	defer n.wg.Done()
 	for {
-		select {
-		case <-n.ctx.Done():
-			return
-		default:
-			if n.x == 0 && n.y == 0 && n.z == 0 && n.roll == 0 && n.pitch == 0 && n.yaw == 0 {
-				time.Sleep(10 * time.Millisecond)
-				continue
-			}
-			if !n.joystick.IsRestYawAxis()  {
-				n.pid_yaw.Setpoint = n.imu.Yaw
-			}
-
-			if !n.joystick.IsRestPitchAxis() {
-				n.pid_pitch.Setpoint = neutralPitch
-				n.pid_pitch_horizontal.Setpoint = neutralPitch
-				n.pid_pitch_vertical.Setpoint = neutralPitch
-			}else{
-				n.pid_pitch.Setpoint = n.imu.Pitch
-				n.pid_pitch_horizontal.Setpoint = n.imu.Pitch
-				n.pid_pitch_vertical.Setpoint = n.imu.Pitch
-			}
-			if !n.joystick.IsRestHeaveAxis(n.z) {
-				n.pid_heave.Setpoint = n.depth.Depth
-				n.pid_heave_live.Setpoint = n.depth.Depth
-			}
-			if activePID && n.joystick.IsRest(n.z) {
-				n.stabalizeAtRest()
-			}else if activePID && n.joystick.IsMovingHorizontally() && n.joystick.IsRestAxes(n.z) {
-				n.stabalizeAtHorizontalMovement()
-
-			}else if activePID && n.joystick.IsMovingVertically(n.z) && (n.joystick.IsRestYawAxis() && n.joystick.IsRestPitchAxis()) {
-				n.stabalizeAtVerticalMovement()
-			}else if activePID && n.joystick.IsRestYawAxis() && (n.joystick.IsRestPitchAxis() && n.joystick.IsRestHeaveAxis(n.z)) {
-				n.stabalizeWhileHeading()
-			}else{
-				n.manualNavigation()
-			}
-			n.navigation.Navigate(x_out, y_out, pitch_out, n.roll, heave_out, yaw_out)
-			time.Sleep(10 * time.Millisecond)
+	select {
+	case <-n.ctx.Done():
+		return
+	default:
+		// Update PID setpoints
+		if !n.joystick.IsRestYawAxis() {
+			n.pid_yaw.Setpoint = n.imu.Yaw
 		}
+
+		if !n.joystick.IsRestPitchAxis() {
+			n.pid_pitch.Setpoint = neutralPitch
+			n.pid_pitch_horizontal.Setpoint = neutralPitch
+			n.pid_pitch_vertical.Setpoint = neutralPitch
+		} else {
+			n.pid_pitch.Setpoint = n.imu.Pitch
+			n.pid_pitch_horizontal.Setpoint = n.imu.Pitch
+			n.pid_pitch_vertical.Setpoint = n.imu.Pitch
+		}
+
+		if !n.joystick.IsRestHeaveAxis(n.z) {
+			n.pid_heave.Setpoint = n.depth.Depth
+			n.pid_heave_live.Setpoint = n.depth.Depth
+		}
+
+		// Stabilization logic
+		var currentState string
+
+		if activePID && n.joystick.IsRest(n.z) {
+			currentState = "rest"
+			if n.lastState != currentState {
+				fmt.Println("Stabilizing at rest")
+				n.lastState = currentState
+			}
+			n.stabalizeAtRest()
+		} else if activePID && n.joystick.IsMovingHorizontally() && n.joystick.IsRestAxes(n.z) {
+			currentState = "horizontal"
+			if n.lastState != currentState {
+				fmt.Println("Stabilizing at horizontal movement")
+				n.lastState = currentState
+			}
+			n.stabalizeAtHorizontalMovement()
+		} else if activePID && n.joystick.IsMovingVertically(n.z) && n.joystick.IsRestYawAxis() && n.joystick.IsRestPitchAxis() {
+			currentState = "vertical"
+			if n.lastState != currentState {
+				fmt.Println("Stabilizing at vertical movement")
+				n.lastState = currentState
+			}
+			n.stabalizeAtVerticalMovement()
+		} else if activePID && n.joystick.IsRestYawAxis() && n.joystick.IsRestPitchAxis() && n.joystick.IsRestHeaveAxis(n.z) {
+			currentState = "heading"
+			if n.lastState != currentState {
+				fmt.Println("Stabilizing while heading")
+				n.lastState = currentState
+			}
+			n.stabalizeWhileHeading()
+		} else {
+			currentState = "manual"
+			if n.lastState != currentState {
+				fmt.Println("Manual navigation")
+				n.lastState = currentState
+			}
+			n.manualNavigation()
+		}
+		n.navigation.Navigate(x_out, y_out, pitch_out, n.roll, heave_out, yaw_out)
+		time.Sleep(10 * time.Millisecond)
 	}
+}
 }
 
 

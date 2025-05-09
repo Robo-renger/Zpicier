@@ -1,7 +1,6 @@
 package pwmdriver
 
 import (
-	"fmt"
 	dtos "zpicier/DTOs"
 	"zpicier/core/configurator"
 	"zpicier/services/pca"
@@ -14,7 +13,6 @@ type PWMDriver struct {
 
 func NewPWMDriver() *PWMDriver {
 	pwmDriverType := configurator.Get("PWM_DRIVER")
-	fmt.Println("_________________PWM_DRIVER", pwmDriverType)
 	if pwmDriverType == "PCA/GO" {
 		return &PWMDriver{
 			pwmDTO: nil,

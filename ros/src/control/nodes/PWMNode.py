@@ -39,7 +39,7 @@ class PWMClientNode(Node):
 
     def get_pwm(self):
         if not self.grpc_connected or self.stub is None:
-            self.get_logger().warn("Stub not ready — skipping PWM fetch.")
+            # self.get_logger().warn("Stub not ready — skipping PWM fetch.")
             return
         try:
             request = pwm__pb2.GetPWMRequest()

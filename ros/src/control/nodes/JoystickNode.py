@@ -11,6 +11,13 @@ class JoystickNode(Node):
     def __init__(self):
         super().__init__('joystick_channel_node')
         self.mapped_buttons = {}
+        self.axis = {
+            'axis_x' : 0,
+            'axis_y' : 0,
+            'roll' : 0,
+            'pitch' : 0,
+            'yaw' : 0,
+        }
         self.lock = threading.Lock()
 
         # gRPC setup
@@ -49,11 +56,12 @@ class JoystickNode(Node):
 
         with self.lock:
             button_data = dict(self.mapped_buttons)
+            axis = self.axis
 
         request = joy_pb2.JoystickRequest(
             buttons=button_data,
-            axis_x=1.0, axis_y= 1.0,
-            roll=0.0, pitch=0.0, yaw=0.0
+            axis_x=axis['axis_x'], axis_y= axis['axis_y'],
+            roll=0.0, pitch=axis['pitch'], yaw=axis['yaw']
         )
         try:
             response = self.stub.UpdateState(request)
@@ -64,6 +72,11 @@ class JoystickNode(Node):
 
     def joystick_callback(self, msg: Joystick):
         with self.lock:
+            self.axis['axis_x'] = msg.left_x_axis
+            self.axis['axis_y'] = msg.left_y_axis
+            self.axis['roll'] = 0
+            self.axis['pitch'] = msg.right_y_axis
+            self.axis['yaw'] = msg.right_x_axis
             self.mapped_buttons = dict(zip(msg.button_names, msg.button_states))
 
     def send_zeroed_message(self):
