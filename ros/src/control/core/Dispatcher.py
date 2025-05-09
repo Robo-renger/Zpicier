@@ -18,7 +18,7 @@ class Dispatcher:
     @staticmethod
     def getDepth():
         if EnvParams().ENV == "SIMULATION":
-            from simulation_services.SIMDepth import SimDepth
+            from simulation_services.SimDepth import SimDepth
             return SimDepth()
         else:
             from services.Depth import DepthSensor
