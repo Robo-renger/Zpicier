@@ -42,6 +42,10 @@ function sendMappedButtonsFromInput() {
     });
 
     const msg = new ROSLIB.Message({
+        left_x_axis: axes[0],
+        left_y_axis: axes[1],
+        right_x_axis: axes[2],
+        right_y_axis: axes[3],
         button_names: mappedNames,
         button_states: boolValues
     });
