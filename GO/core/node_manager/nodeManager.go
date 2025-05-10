@@ -42,7 +42,20 @@ func (nm *NodeManager) RegisterAll() {
 	nm.Register("navigation", navigation_node.NewNode())
 
 }
-
+func (nm *NodeManager) Kill(name string) {
+	node, ok := nm.nodes[name]
+	if !ok {
+		fmt.Printf("Node '%s' not registered\n", name)
+		return
+	}
+	node.Kill()
+	fmt.Printf("Node '%s' killed\n", name)
+}
+func (nm *NodeManager) KillAll() {
+	for name := range nm.nodes {
+		nm.Kill(name)
+	}
+}
 func (nm *NodeManager) RunAll() {
 	for name := range nm.nodes {
 		fmt.Printf("Running node: %s\n", name)

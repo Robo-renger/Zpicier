@@ -62,6 +62,20 @@ func NewSwitch(pinRef interface{}) (*Switch, error) {
 	}, nil
 }
 
+func (s *Switch) Close() error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if !s.simulated && s.pin != nil {
+		if err := s.pin.Out(gpio.Low); err != nil {
+			return fmt.Errorf("failed to set pin low before closing: %v", err)
+		}
+		s.pin = nil
+	}
+	return nil
+}
+
+
 func (s *Switch) On() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()

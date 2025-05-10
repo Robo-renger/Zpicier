@@ -47,6 +47,14 @@ func (n *SwitchingNode) handle() {
 	n.wg.Wait()
 }
 
+func (n *SwitchingNode) Kill() {
+	n.joystick.Close()
+	for _, sw := range n.switches {
+		sw.Close()
+	}
+	n.wg.Wait()
+}
+
 // To make this node runnable from nodeManager
 func (n *SwitchingNode) Run() {
 	node := NewNode()

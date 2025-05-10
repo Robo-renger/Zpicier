@@ -18,6 +18,10 @@ import (
 )
 
 func main() {
+
+	var wg sync.WaitGroup
+	nodeManager := nodemanager.NewNodeManager(&wg)
+	
 	//Handling sigterm
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
@@ -26,6 +30,9 @@ func main() {
 	go func() {
 		sig := <-sigs
 		fmt.Printf("\nReceived signal: %s, exiting...\n", sig)
+		nodeManager.KillAll()
+		fmt.Println("Waiting for all nodes to finish...")
+		fmt.Println("All nodes killed")
 		os.Exit(0)
 	}()
 	// End of signal handling
@@ -42,7 +49,6 @@ func main() {
 	}
 	// End of initialization
 	
-	var wg sync.WaitGroup
 
 	// Register gRPC server
 	wg.Add(1)
@@ -68,7 +74,6 @@ func main() {
 	// End of gRPC server registration
 
 	// Register and run all nodes
-	nodeManager := nodemanager.NewNodeManager(&wg)
 	nodeManager.RegisterAll()
 	nodeManager.RunAll()
 	// End of node registration and running

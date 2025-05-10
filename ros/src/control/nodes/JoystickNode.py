@@ -3,7 +3,7 @@ from rclpy.node import Node
 import grpc
 import threading
 from concurrent.futures import TimeoutError as GRPCTimeoutError
-
+from utils.Logger import Logger
 from data_contracts import joy_pb2, joy_pb2_grpc
 from msgs.msg import Joystick
 import time
@@ -19,7 +19,7 @@ class JoystickNode(Node):
             'yaw' : 0,
         }
         self.lock = threading.Lock()
-
+        self.logger = Logger(self)
         # gRPC setup
         self.channel = None
         self.stub = None
@@ -36,19 +36,19 @@ class JoystickNode(Node):
         self.send_timer = self.create_timer(0.01, self.send_joystick_data)
 
         # Register shutdown callback
-
+        
     def try_connect_grpc(self):
         if self.grpc_connected:
             return
         try:
-            self.get_logger().info("Trying to connect to gRPC...")
+            self.logger.logInfoInPlace("Trying to connect to gRPC...")
             self.channel = grpc.insecure_channel('localhost:50051')
             grpc.channel_ready_future(self.channel).result(timeout=2)
             self.stub = joy_pb2_grpc.JoystickServiceStub(self.channel)
             self.grpc_connected = True
-            self.get_logger().info("Connected to gRPC.")
+            self.logger.logInfoInPlace("Connected to gRPC.")
         except grpc.FutureTimeoutError:
-            self.get_logger().warn("gRPC connection timeout. Retrying...")
+            self.logger.logWarnInPlace("gRPC connection timeout. Retrying...")
 
     def send_joystick_data(self):
         if not self.grpc_connected:
@@ -65,10 +65,10 @@ class JoystickNode(Node):
         )
         try:
             response = self.stub.UpdateState(request)
-            # self.get_logger().info(f"Sent joystick data | Status: {response.status}")
+            # self.logger.logInfoInPlace(f"Sent joystick data | Status: {response.status}")
         except grpc.RpcError as e:
             self.grpc_connected = False
-            self.get_logger().error(f"gRPC error: {e.details() if hasattr(e, 'details') else str(e)}")
+            self.logger.logErrorInPlace(f"gRPC error: {e.details() if hasattr(e, 'details') else str(e)}")
 
     def joystick_callback(self, msg: Joystick):
         with self.lock:
@@ -88,15 +88,15 @@ class JoystickNode(Node):
 
         request = joy_pb2.JoystickRequest(
             buttons=zeroed_buttons,
-            axis_x=0.0, axis_y=0.0, axis_z=0.0,
+            axis_x=0.0, axis_y=0.0,
             roll=0.0, pitch=0.0, yaw=0.0
         )
         try:
             response = self.stub.UpdateState(request)
-            self.get_logger().info("Sent final zeroed joystick state before shutdown.")
+            self.logger.logInfoInPlace("Sent final zeroed joystick state before shutdown.")
             time.sleep(0.1)
         except grpc.RpcError as e:
-            self.get_logger().error(f"Failed to send shutdown message: {e.details() if hasattr(e, 'details') else str(e)}")
+            self.logger.logErrorInPlace(f"Failed to send shutdown message: {e.details() if hasattr(e, 'details') else str(e)}")
 
 def main(args=None):
     rclpy.init(args=args)
@@ -105,8 +105,9 @@ def main(args=None):
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
-        node.get_logger().info("Keyboard interrupt detected. Shutting down.")
+        node.logger.logInfoInPlace("Keyboard interrupt detected. Sending shutdown message...")
+        node.send_zeroed_message()
     finally:
-        node.send_zeroed_message()  # ✅ Send final data before shutdown
         node.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()

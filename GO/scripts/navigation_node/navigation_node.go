@@ -119,6 +119,13 @@ func (n *NavigationNode) handle() {
 	n.wg.Wait()
 }
 
+func (n *NavigationNode) Kill() {
+	n.cancel()
+	n.joystick.Close()
+	for _, thruster := range n.thrusters {
+		thruster.Stop()
+	}
+}
 
 func (n *NavigationNode) startJoystickReader() {
 	defer n.wg.Done()

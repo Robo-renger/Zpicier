@@ -39,7 +39,11 @@ func GetInstance() *Joystick {
 	})
 	return instance
 }
-
+func (j *Joystick) Close() {
+	j.mu.Lock()
+	defer j.mu.Unlock()
+	instance = nil
+}
 // IsClicked returns the current state of a mechanism (button)
 func (j *Joystick) IsClicked(mechanism string) bool {
 	j.mu.RLock()

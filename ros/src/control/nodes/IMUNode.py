@@ -49,6 +49,11 @@ class IMUNode(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = IMUNode()
-    rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        print("[INFO] Ctrl+C detected, shutting down gracefully")
+    finally:
+        node.destroy_node()
+        if rclpy.ok():
+            rclpy.shutdown()    
