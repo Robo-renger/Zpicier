@@ -25,34 +25,68 @@ const joystickTopic = new ROSLIB.Topic({
     messageType: 'msgs/Joystick'
 });
 
-function sendMappedButtonsFromInput() {
-    const rawInput = document.getElementById("buttons").value;  // e.g. "button_l1:true,button_x:false"
-    if (!rawInput) return;
+function sendJoystickData() {
+    const gamepad = scanGamepads();
+    if (gamepad) {
+        const axes = gamepad.axes.map(value => parseFloat(value.toFixed(2)));
+        const buttons = gamepad.buttons.map(btn => btn.pressed ? true : false);
 
-    const pairs = rawInput.split(",");
-    const mappedNames = [];
-    const boolValues = [];
+        const buttonNames = [
+            "button_x", "button_o", "button_rect", "button_tri",
+            "button_l1", "button_r1", "button_l2", "button_r2",
+            "button_l3", "button_r3", "button_top", "button_bot",
+            "button_left", "button_right", "button_options", "button_share"
+        ];
 
-    pairs.forEach(pair => {
-        const [rawBtn, val] = pair.split(":").map(s => s.trim());
-        console.log("rawBtn:", rawBtn);
-        console.log("val:", val);
-        mappedNames.push(rawBtn);
-        boolValues.push(val.toLowerCase() === "true");
-    });
+        const buttonStates = [
+            buttons[0], buttons[1], buttons[2], buttons[3],
+            buttons[4], buttons[5], buttons[6], buttons[7],
+            buttons[10], buttons[11], buttons[12], buttons[13],
+            buttons[14], buttons[15], buttons[9], buttons[8]
+        ];
 
-    const msg = new ROSLIB.Message({
-        left_x_axis: axes[0],
-        left_y_axis: axes[1],
-        right_x_axis: axes[2],
-        right_y_axis: axes[3],
-        button_names: mappedNames,
-        button_states: boolValues
-    });
+        const msg = new ROSLIB.Message({
+            left_x_axis: axes[0],
+            left_y_axis: axes[1],
+            right_x_axis: axes[2],
+            right_y_axis: axes[3],
+            button_names: buttonNames,
+            button_states: buttonStates
+        });
 
-    joystickTopic.publish(msg);
-    console.log("Published mapped buttons:", msg);
+        console.log("Sending joystick data (gamepad):", msg);
+        joystickTopic.publish(msg);
+    } else {
+        // Fallback: get axes and buttons from manual input
+        const rawAxes = document.getElementById("axes").value;   // e.g. "0.1,-0.2,0.0,0.5"
+        const rawButtons = document.getElementById("buttons").value; // e.g. "button_l1:true,button_x:false"
+
+        if (!rawAxes || !rawButtons) return;
+
+        const axesValues = rawAxes.split(",").map(s => parseFloat(s.trim())); // [lx, ly, rx, ry]
+        const mappedNames = [];
+        const boolValues = [];
+
+        rawButtons.split(",").forEach(pair => {
+            const [name, val] = pair.split(":").map(s => s.trim());
+            mappedNames.push(name);
+            boolValues.push(val.toLowerCase() === "true");
+        });
+
+        const msg = new ROSLIB.Message({
+            left_x_axis: axesValues[0] || 0.0,
+            left_y_axis: axesValues[1] || 0.0,
+            right_x_axis: axesValues[2] || 0.0,
+            right_y_axis: axesValues[3] || 0.0,
+            button_names: mappedNames,
+            button_states: boolValues
+        });
+
+        console.log("Sending joystick data (manual):", msg);
+        joystickTopic.publish(msg);
+    }
 }
+
 
 
 // Function to detect gamepads
@@ -62,51 +96,7 @@ function scanGamepads() {
     return gamepads[0]; // Use the first connected gamepad
 }
 
-// Send joystick data to ROS
-// function sendJoystickData() {
-//     const gamepad = scanGamepads();
-//     if (!gamepad) {
-//         return;
-//     }
 
-//     // Extract joystick axes
-//     const axes = gamepad.axes.map(value => parseFloat(value.toFixed(2)));
-//     const buttons = gamepad.buttons.map(btn => btn.pressed ? 1 : 0);
-//     const button_start = !!buttons[9]
-//     const button_share = !!buttons[8]
-//     const button_touch = !!buttons[16]
-
-//     // Extract button presses
-//     console.log(axes)
-//     console.log(buttons)
-//     // Create and send ROS message
-//     const joystickMessage = new ROSLIB.Message({
-//         left_x_axis: axes[0],
-//         left_y_axis: axes[1],
-//         right_x_axis: axes[2],
-//         right_y_axis: axes[3],
-//         button_x: !!buttons[0],
-//         button_o: !!buttons[1],
-//         button_rect: !!buttons[2],
-//         button_tri: !!buttons[3],
-//         button_l1: !!buttons[4],
-//         button_r1: !!buttons[5],
-//         button_l2: !!buttons[6],
-//         button_r2: !!buttons[7],
-//         button_l3: !!buttons[10],
-//         button_r3: !!buttons[11],
-//         button_top: !!buttons[12],
-//         button_bot: !!buttons[13],
-//         button_left: !!buttons[14],
-//         button_right: !!buttons[15],
-//         button_options: !!buttons[9],
-//         button_share: !!buttons[8]
-//     });
-
-//     joystickTopic.publish(joystickMessage);
-// }
-
-// Poll joystick data every 100ms
 setInterval(sendJoystickData, 100);
 
 var pidTopic = new ROSLIB.Topic({
