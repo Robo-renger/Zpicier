@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 import os
 from utils.Configurator import Configurator
 from utils.EnvParams import EnvParams

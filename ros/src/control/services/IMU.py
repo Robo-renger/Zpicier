@@ -2,17 +2,17 @@
 import time
 import math
 import adafruit_bno08x as bno
-from interface.IBNO085 import IBNO085
+from interfaces.IBNO085 import IBNO085
 from zope.interface import implementer
 from digitalio import DigitalInOut
 from interfaces.IBNO085 import IBNO085
 from adafruit_bno08x.i2c import BNO08X_I2C
 from adafruit_extended_bus import ExtendedI2C
-from exceptions.SensorInitializationError import SensorInitializationError
-from exceptions.SensorReadError import SensorReadError
-from exceptions.SensorCalibrationError import SensorCalibrationError
-from services.Logger import Logger
-from DTOs.LogSeverity import LogSeverity
+# from exceptions.SensorInitializationError import SensorInitializationError
+# from exceptions.SensorReadError import SensorReadError
+# from exceptions.SensorCalibrationError import SensorCalibrationError
+# from services.Logger import Logger
+# from DTOs.LogSeverity import LogSeverity
 @implementer(IBNO085)
 class BNO085:
     def __init__(self, address: int = 0x4b, reset_pin: DigitalInOut = None, debug: bool = False):
@@ -29,9 +29,10 @@ class BNO085:
             i2c = ExtendedI2C(3, frequency=400000)
             self.bno = BNO08X_I2C(i2c, address=address, reset=reset_pin, debug=debug)
         except Exception as e:
-            Logger.logToFile(LogSeverity.ERROR, f"BNO085 sensor initialization failed: {str(e)}", "BNO085")
-            Logger.logToGUI(LogSeverity.ERROR, f"BNO085 sensor initialization failed: {str(e)}", "BNO085")
-            raise SensorInitializationError(f"BNO085 sensor initialization failed: {str(e)}")
+            print(f"BNO085 sensor initialization failed: {str(e)}")
+            # Logger.logToFile(LogSeverity.ERROR, f"BNO085 sensor initialization failed: {str(e)}", "BNO085")
+            # Logger.logToGUI(LogSeverity.ERROR, f"BNO085 sensor initialization failed: {str(e)}", "BNO085")
+            # raise SensorInitializationError(f"BNO085 sensor initialization failed: {str(e)}")
 
     def enableFeature(self, feature: int) -> None:
         self.bno.enable_feature(feature)
@@ -47,9 +48,10 @@ class BNO085:
             accel_x, accel_y, accel_z = self.bno.acceleration
             return accel_x, accel_y, accel_z
         except Exception as e:
-            Logger.logToFile(LogSeverity.ERROR, f"Failed to read acceleration data: {str(e)}", "BNO085")
-            Logger.logToGUI(LogSeverity.ERROR, f"Failed to read acceleration data: {str(e)}", "BNO085")
-            raise SensorReadError(f"Failed to read acceleration data: {str(e)}")
+            print(f"Failed to read acceleration data: {str(e)}")
+            # Logger.logToFile(LogSeverity.ERROR, f"Failed to read acceleration data: {str(e)}", "BNO085")
+            # Logger.logToGUI(LogSeverity.ERROR, f"Failed to read acceleration data: {str(e)}", "BNO085")
+            # raise SensorReadError(f"Failed to read acceleration data: {str(e)}")
 
     def getGyro(self) -> tuple:
         """        
@@ -62,9 +64,10 @@ class BNO085:
             gyro_x, gyro_y, gyro_z = self.bno.gyro
             return gyro_x, gyro_y, gyro_z
         except Exception as e:
-            Logger.logToFile(LogSeverity.ERROR, f"Failed to read gyroscope data: {str(e)}", "BNO085")
-            Logger.logToGUI(LogSeverity.ERROR, f"Failed to read gyroscope data: {str(e)}", "BNO085")
-            raise SensorReadError(f"Failed to read gyroscope data: {str(e)}")
+            print(f"Failed to read gyroscope data: {str(e)}")
+            # Logger.logToFile(LogSeverity.ERROR, f"Failed to read gyroscope data: {str(e)}", "BNO085")
+            # Logger.logToGUI(LogSeverity.ERROR, f"Failed to read gyroscope data: {str(e)}", "BNO085")
+            # raise SensorReadError(f"Failed to read gyroscope data: {str(e)}")
         
     def getMagnetometer(self) -> tuple:
         """
@@ -77,9 +80,10 @@ class BNO085:
             mag_x, mag_y, mag_z = self.bno.magnetic
             return mag_x, mag_y, mag_z
         except Exception as e:
-            Logger.logToFile(LogSeverity.ERROR, f"Failed to read magnetometer data: {str(e)}", "BNO085")
-            Logger.logToGUI(LogSeverity.ERROR, f"Failed to read magnetometer data: {str(e)}", "BNO085")
-            raise SensorReadError(f"Failed to read magnetometer data: {str(e)}")
+            print(f"Failed to read magnetometer data: {str(e)}")
+            # Logger.logToFile(LogSeverity.ERROR, f"Failed to read magnetometer data: {str(e)}", "BNO085")
+            # Logger.logToGUI(LogSeverity.ERROR, f"Failed to read magnetometer data: {str(e)}", "BNO085")
+            # raise SensorReadError(f"Failed to read magnetometer data: {str(e)}")
 
     def getQuaternion(self) -> tuple:
         """
@@ -92,9 +96,10 @@ class BNO085:
             quat_i, quat_j, quat_k, quat_real = self.bno.quaternion
             return quat_i, quat_j, quat_k, quat_real
         except Exception as e:
-            Logger.logToFile(LogSeverity.ERROR, f"Failed to read quaternion data: {str(e)}", "BNO085")
-            Logger.logToGUI(LogSeverity.ERROR, f"Failed to read quaternion data: {str(e)}", "BNO085")
-            raise SensorReadError(f"Failed to read quaternion data: {str(e)}")
+            print(f"Failed to read quaternion data: {str(e)}")
+            # Logger.logToFile(LogSeverity.ERROR, f"Failed to read quaternion data: {str(e)}", "BNO085")
+            # Logger.logToGUI(LogSeverity.ERROR, f"Failed to read quaternion data: {str(e)}", "BNO085")
+            # raise SensorReadError(f"Failed to read quaternion data: {str(e)}")
     
     def getEulerAngles(self) -> tuple:
         """
@@ -110,9 +115,10 @@ class BNO085:
             roll = math.atan2(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2))
             return roll, pitch, yaw
         except Exception as e:
-            Logger.logToFile(LogSeverity.ERROR, f"Failed to calculate Euler angles: {str(e)}", "BNO085")
-            Logger.logToGUI(LogSeverity.ERROR, f"Failed to calculate Euler angles: {str(e)}", "BNO085")
-            raise SensorReadError(f"Failed to calculate Euler angles: {str(e)}")
+            print(f"Failed to calculate Euler angles: {str(e)}")
+            # Logger.logToFile(LogSeverity.ERROR, f"Failed to calculate Euler angles: {str(e)}", "BNO085")
+            # Logger.logToGUI(LogSeverity.ERROR, f"Failed to calculate Euler angles: {str(e)}", "BNO085")
+            # raise SensorReadError(f"Failed to calculate Euler angles: {str(e)}")
     
     def Calibrate(self) -> None:
         """
@@ -152,6 +158,7 @@ class BNO085:
                 print("**************************************************************")
             print("Calibration done")
         except Exception as e:
-            Logger.logToFile(LogSeverity.ERROR, f"Calibration failed: {str(e)}", "BNO085")
-            Logger.logToGUI(LogSeverity.ERROR, f"Calibration failed: {str(e)}", "BNO085")
-            raise SensorCalibrationError(f"Calibration failed: {str(e)}")
+            print(f"Calibration failed: {str(e)}")
+            # Logger.logToFile(LogSeverity.ERROR, f"Calibration failed: {str(e)}", "BNO085")
+            # Logger.logToGUI(LogSeverity.ERROR, f"Calibration failed: {str(e)}", "BNO085")
+            # raise SensorCalibrationError(f"Calibration failed: {str(e)}")

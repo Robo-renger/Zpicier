@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 from ms5837 import MS5837_02BA
 from zope.interface import implementer
-from interface.IDepth import IDepthSensor
-from exceptions.SensorInitializationError import SensorInitializationError
-from exceptions.SensorReadError import SensorReadError
-from services.Logger import Logger
-from DTOs.LogSeverity import LogSeverity
+from interfaces.IDepthSensor import IDepthSensor
+# from exceptions.SensorInitializationError import SensorInitializationError
+# from exceptions.SensorReadError import SensorReadError
+# from services.Logger import Logger
+# from DTOs.LogSeverity import LogSeverity
 
 @implementer(IDepthSensor)
 class DepthSensor:
@@ -20,10 +20,10 @@ class DepthSensor:
         """
         self.sensor = MS5837_02BA(bus) # Specify bus
 
-        if not self.sensor.init():
-            Logger.logToFile(LogSeverity.ERROR, "Depth sensor initialization failed.", "DepthSensor")
-            Logger.logToGUI(LogSeverity.ERROR, "Depth sensor initialization failed.", "DepthSensor")
-            raise SensorInitializationError("Depth sensor initialization failed.")
+        # if not self.sensor.init():
+        #     Logger.logToFile(LogSeverity.ERROR, "Depth sensor initialization failed.", "DepthSensor")
+        #     Logger.logToGUI(LogSeverity.ERROR, "Depth sensor initialization failed.", "DepthSensor")
+        #     raise SensorInitializationError("Depth sensor initialization failed.")
         
         self._fluid_density = fluid_density
 
@@ -45,9 +45,10 @@ class DepthSensor:
         try:
             self.sensor.read()
         except Exception as e:
-            Logger.logToFile(LogSeverity.ERROR, f"Failed to read sensor data: {str(e)}", "DepthSensor")
-            Logger.logToGUI(LogSeverity.ERROR, f"Failed to read sensor data: {str(e)}", "DepthSensor")
-            raise SensorReadError(f"Failed to read depth sensor data: {str(e)}")
+            print(f"Failed to read depth sensor data: {str(e)}")
+            # Logger.logToFile(LogSeverity.ERROR, f"Failed to read sensor data: {str(e)}", "DepthSensor")
+            # Logger.logToGUI(LogSeverity.ERROR, f"Failed to read sensor data: {str(e)}", "DepthSensor")
+            # raise SensorReadError(f"Failed to read depth sensor data: {str(e)}")
     
     def getPressure(self) -> float:
         """
@@ -57,9 +58,10 @@ class DepthSensor:
         try:
             return self.sensor.pressure()
         except Exception as e:
-            Logger.logToFile(LogSeverity.ERROR, f"Failed to read pressure data: {str(e)}", "DepthSensor")
-            Logger.logToGUI(LogSeverity.ERROR, f"Failed to read pressure data: {str(e)}", "DepthSensor")
-            raise SensorReadError(f"Failed to read pressure data: {str(e)}")
+            print(f"Failed to read pressure data: {str(e)}")
+            # Logger.logToFile(LogSeverity.ERROR, f"Failed to read pressure data: {str(e)}", "DepthSensor")
+            # Logger.logToGUI(LogSeverity.ERROR, f"Failed to read pressure data: {str(e)}", "DepthSensor")
+            # raise SensorReadError(f"Failed to read pressure data: {str(e)}")
 
     def getDepth(self) -> float:
         """
@@ -69,6 +71,7 @@ class DepthSensor:
         try: 
             return self.sensor.depth()
         except Exception as e:
-            Logger.logToFile(LogSeverity.ERROR, f"Failed to read depth data: {str(e)}", "DepthSensor")
-            Logger.logToGUI(LogSeverity.ERROR, f"Failed to read depth data: {str(e)}", "DepthSensor")
-            raise SensorReadError(f"Failed to read depth data: {str(e)}")
+            print(f"Failed to read depth data: {str(e)}")
+            # Logger.logToFile(LogSeverity.ERROR, f"Failed to read depth data: {str(e)}", "DepthSensor")
+            # Logger.logToGUI(LogSeverity.ERROR, f"Failed to read depth data: {str(e)}", "DepthSensor")
+            # raise SensorReadError(f"Failed to read depth data: {str(e)}")

@@ -11,7 +11,7 @@ class GUIStreamingNode(Node):
         self.get_logger().info("GUI Streaming Node initialized.")
 
     def stream(self):
-        command = f'mjpg-streamer -o "output_http.so -p 8080 -w {EnvParams().WEB_INDEX_LOCATION}"'
+        command = f'mjpg_streamer -o "output_http.so -p 8080 -w {EnvParams().WEB_INDEX_LOCATION}"'
         self.get_logger().info(f"Running command: {command}")
         subprocess.run(command, shell=True)
 
