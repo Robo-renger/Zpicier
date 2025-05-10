@@ -8,6 +8,7 @@ import data_contracts.pwm_pb2 as pwm__pb2
 from grpc import FutureTimeoutError
 from core.Dispatcher import Dispatcher
 from utils.Logger import Logger
+
 class PWMClientNode(Node):
     def __init__(self):
         super().__init__('pwm_client_node')

@@ -2,6 +2,12 @@ import rclpy
 from rclpy.node import Node
 
 class Logger:
+    COLOR_RESET = "\033[0m"
+    COLOR_INFO = "\033[92m"    # Green
+    COLOR_WARN = "\033[93m"    # Yellow
+    COLOR_ERROR = "\033[91m"   # Red
+    COLOR_DEBUG = "\033[94m"   # Blue
+
     def __init__(self, node: Node):
         self.node = node
         self.logger = node.get_logger()
@@ -10,13 +16,13 @@ class Logger:
         if rclpy.ok():
             self.logger.info(msg)
         else:
-            print(f"[INFO] {msg}")
+            print(f"{self.COLOR_INFO}[INFO] {msg}{self.COLOR_RESET}")
 
     def logWarnInPlace(self, msg):
         if rclpy.ok():
             self.logger.warn(msg)
         else:
-            print(f"[WARN] {msg}")
+            print(f"{self.COLOR_WARN}[WARN] {msg}{self.COLOR_RESET}")
 
     def warning(self, msg):
         self.logWarnInPlace(msg)
@@ -25,10 +31,10 @@ class Logger:
         if rclpy.ok():
             self.logger.error(msg)
         else:
-            print(f"[ERROR] {msg}")
+            print(f"{self.COLOR_ERROR}[ERROR] {msg}{self.COLOR_RESET}")
 
     def debug(self, msg):
         if rclpy.ok():
             self.logger.debug(msg)
         else:
-            print(f"[DEBUG] {msg}")
+            print(f"{self.COLOR_DEBUG}[DEBUG] {msg}{self.COLOR_RESET}")

@@ -5,7 +5,7 @@ import data_contracts.imu_pb2_grpc as imu__pb2_grpc
 import data_contracts.imu_pb2 as imu__pb2
 from core.Dispatcher import Dispatcher
 from grpc import FutureTimeoutError
-
+from utils.Logger import Logger
 class IMUNode(Node):
     def __init__(self):
         super().__init__('imu_sender_node')
@@ -13,7 +13,7 @@ class IMUNode(Node):
         self.channel = None
         self.stub = None
         self.imu = Dispatcher.getIMU()
-
+        self.logger = Logger(self)
         # Retry connection every 2 seconds (non-blocking)
         self.grpc_timer = self.create_timer(2.0, self.connect_to_grpc)
 
@@ -25,14 +25,14 @@ class IMUNode(Node):
             return
 
         try:
-            self.get_logger().info("Attempting gRPC connection...")
+            self.logger.logInfoInPlace("Attempting gRPC connection...")
             self.channel = grpc.insecure_channel('localhost:50051')
             grpc.channel_ready_future(self.channel).result(timeout=2)
             self.stub = imu__pb2_grpc.IMUServiceStub(self.channel)
             self.grpc_connected = True
-            self.get_logger().info("gRPC connected.")
+            self.logger.logInfoInPlace("gRPC connected.")
         except FutureTimeoutError:
-            self.get_logger().warn("gRPC connection failed. Will retry...")
+            self.logger.logWarnInPlace("gRPC connection failed. Will retry...")
 
     def run(self):
         if not self.grpc_connected:
@@ -44,7 +44,7 @@ class IMUNode(Node):
             response = self.stub.SetEulerAngles(request)
         except grpc.RpcError as e:
             self.grpc_connected = False  # Force reconnection
-            self.get_logger().error(f"gRPC failed: {e.details() if hasattr(e, 'details') else str(e)}")
+            self.logger.logErrorInPlace(f"gRPC failed: {e.details() if hasattr(e, 'details') else str(e)}")
 
 def main(args=None):
     rclpy.init(args=args)
