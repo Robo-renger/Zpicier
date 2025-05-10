@@ -2,6 +2,7 @@ package env_params
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -26,6 +27,7 @@ func Init() error {
 		root, errRoot := findProjectRoot()
 		if errRoot != nil {
 			err = errRoot
+			fmt.Println("Env file path:")
 			return
 		}
 
@@ -61,16 +63,33 @@ func Get(key string) string {
 
 // findProjectRoot traverses upward until it finds .env
 func findProjectRoot() (string, error) {
-	exePath, err := os.Executable()
-	if err != nil {
-		return "", err
+	// Try working directory first (for dev)
+	dir, err := os.Getwd()
+	if err == nil {
+		if root, ok := findEnvInAncestors(dir); ok {
+			return root, nil
+		}
 	}
-	dir := filepath.Dir(exePath)
 
+	// Try binary path (for ROS / built executable)
+	exePath, err := os.Executable()
+	if err == nil {
+		dir := filepath.Dir(exePath)
+		if root, ok := findEnvInAncestors(dir); ok {
+			return root, nil
+		}
+	}
+
+	return "", fmt.Errorf("no .env file found in working dir or executable path")
+}
+
+func findEnvInAncestors(start string) (string, bool) {
+	dir := start
 	for {
 		envPath := filepath.Join(dir, ".env")
 		if _, err := os.Stat(envPath); err == nil {
-			return dir, nil
+			fmt.Println("[DEBUG] Found .env at:", envPath)
+			return dir, true
 		}
 		parent := filepath.Dir(dir)
 		if parent == dir {
@@ -78,8 +97,9 @@ func findProjectRoot() (string, error) {
 		}
 		dir = parent
 	}
-	return "",instance.logger.LogInPlaceError("No .env file found in parent directories") 
+	return "", false
 }
+
 
 
 // readEnvFile reads KEY=VAL lines from a file

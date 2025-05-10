@@ -13,15 +13,22 @@ class Logger:
         if node != None:
             self.logger = node.get_logger()
 
+    def logSuccessInPlace(self, msg):
+        if rclpy.ok() and self.node is not None:
+            self.logger.info(f"✅[SUCCESS] {msg}")
+        else:
+            print(f"{self.COLOR_INFO}[SUCCESS] {msg}{self.COLOR_RESET}")
+
+
     def logInfoInPlace(self, msg):
         if rclpy.ok() and self.node != None:
-            self.logger.info(msg)
+            self.logger.info(f"❕[INFO] {msg}")
         else:
             print(f"{self.COLOR_INFO}[INFO] {msg}{self.COLOR_RESET}")
 
     def logWarnInPlace(self, msg):
         if  rclpy.ok() and self.node != None:
-            self.logger.warn(msg)
+            self.logger.warn(f"❌[WARN]{msg}")
         else:
             print(f"{self.COLOR_WARN}[WARN] {msg}{self.COLOR_RESET}")
 

@@ -3,6 +3,8 @@ package thruster
 import (
 	"log"
 	"strconv"
+	"time"
+	"zpicier/core/logger"
 	pwmdriver "zpicier/services/pwm_driver"
 	smoother "zpicier/services/smoother"
 )
@@ -15,6 +17,7 @@ type Thruster struct {
 	Current_value int
 	pwmDriver *pwmdriver.PWMDriver
 	smoother *smoother.Smoother
+	logger *logger.Logger
 }
 
 func NewThruster(channel interface{}, min_value int, max_value int, angle int) *Thruster {
@@ -40,7 +43,16 @@ func NewThruster(channel interface{}, min_value int, max_value int, angle int) *
 		smoother: smoother.NewSmoother(),
 		Angle: angle,
 		pwmDriver: pwmdriver.NewPWMDriver(),
+		logger: logger.NewLogger(),
 	}
+}
+
+func (t *Thruster) Init() {
+	go func() {
+		t.logger.LogInPlaceInfo("Thruster %d initialized", t.Channel)
+		t.Output(1500)
+		time.Sleep(3 * time.Second)
+	}()
 }
 
 func (t *Thruster) ensureValue(value int) int {
@@ -64,5 +76,6 @@ func (t *Thruster) Drive(value int) {
 }
 
 func (t *Thruster) Stop() {
-	t.Drive(0)
+	t.Drive(1500)
 }
+

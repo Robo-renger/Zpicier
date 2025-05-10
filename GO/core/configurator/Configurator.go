@@ -49,27 +49,39 @@ func setBasePath(basePath string) {
 
 }
 func getConfigPath() (string, error) {
-	exePath, err := os.Executable()
-	if err != nil {
-		return "", err
+	// Try working directory first (for `go run`)
+	if dir, err := os.Getwd(); err == nil {
+		if root, ok := findConfigInAncestors(dir); ok {
+			return root, nil
+		}
 	}
-	dir := filepath.Dir(exePath)
 
+	// Then try from the executable location (for built binaries, ROS launch, etc.)
+	if exePath, err := os.Executable(); err == nil {
+		dir := filepath.Dir(exePath)
+		if root, ok := findConfigInAncestors(dir); ok {
+			return root, nil
+		}
+	}
+
+	return "", fmt.Errorf("no /config directory found in working directory or executable path")
+}
+
+func findConfigInAncestors(start string) (string, bool) {
+	dir := start
 	for {
 		configPath := filepath.Join(dir, "config")
-		info, err := os.Stat(configPath)
-		if err == nil && info.IsDir() {
-			// Found directory containing "config"
-			return dir, nil
+		if info, err := os.Stat(configPath); err == nil && info.IsDir() {
+			fmt.Println("[DEBUG] Found config directory at:", configPath)
+			return dir, true
 		}
-
 		parent := filepath.Dir(dir)
 		if parent == dir {
-			// Reached filesystem root
-			return "", os.ErrNotExist
+			break // reached filesystem root
 		}
 		dir = parent
 	}
+	return "", false
 }
 
 // Init loads all queued YAML files into a merged config

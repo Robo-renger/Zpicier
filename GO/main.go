@@ -18,7 +18,6 @@ import (
 )
 
 func main() {
-
 	var wg sync.WaitGroup
 	nodeManager := nodemanager.NewNodeManager(&wg)
 	

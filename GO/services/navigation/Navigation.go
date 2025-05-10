@@ -10,6 +10,12 @@ type Navigation struct {
 	Vectorizer *vectorizer.Vectorizer
 }
 
+func (n *Navigation) InitMotors() {
+	for _, thruster := range n.thrusters {
+		thruster.Init()
+	}
+}
+
 func NewNavigation() *Navigation {
 	return &Navigation{
 		thrusters: make(map[string]*thruster.Thruster),

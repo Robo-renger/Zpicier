@@ -2,12 +2,12 @@ package navigation_node
 
 import (
 	"context"
-	"fmt"
 	"math"
 	"sync"
 	"time"
 	dtos "zpicier/DTOs"
 	"zpicier/core/configurator"
+	"zpicier/core/logger"
 	"zpicier/services/joystick"
 	"zpicier/services/navigation"
 	PID "zpicier/services/pid_controller"
@@ -36,6 +36,7 @@ type NavigationNode struct {
 	imu *dtos.IMU
 	depth *dtos.Depth
 	lastState string
+	logger *logger.Logger
 
 }
 var(
@@ -71,6 +72,7 @@ func NewNode() *NavigationNode {
 		pid_heave_live: PID.NewPIDController(configurator.Get("live_heave_KP"), configurator.Get("live_heave_KI"), configurator.Get("live_heave_KD")),
 		imu: dtos.GetIMUInstance(),
 		depth: dtos.GetDepthInstance(),
+		logger: logger.NewLogger(),
 	}
 }
 func (n *NavigationNode) Init() error {
@@ -89,27 +91,30 @@ func (n *NavigationNode) Init() error {
 		"back":        thruster.NewThruster(configurator.Get("BACK_PCA_CHANNEL"), 1100, 1900, 90),
 		"front":       thruster.NewThruster(configurator.Get("FRONT_PCA_CHANNEL"), 1100, 1900, 90),
 	}
-	n.calibratePitchNeutral()
-	fmt.Println("Neutral pitch calibrated to:", neutralPitch)
 	n.navigation.SetThrusters(n.thrusters)
+	n.navigation.InitMotors()
 	n.pid_heave.MinOutput = -1 
 	n.pid_heave.MaxOutput = 1
-
+	
 	n.pid_heave_live.MinOutput = -1
 	n.pid_heave_live.MaxOutput = 1
-
+	
 	n.pid_yaw.MinOutput = -1
 	n.pid_yaw.MaxOutput = 1
-
+	
 	n.pid_pitch.MinOutput = -1
 	n.pid_pitch.MaxOutput = 1
-
+	
 	n.pid_pitch_horizontal.MinOutput = -1
 	n.pid_pitch_horizontal.MaxOutput = 1
 	
 	n.pid_pitch_vertical.MinOutput = -1
 	n.pid_pitch_vertical.MaxOutput = 1
 
+	n.logger.LogInPlaceInfo("Calibrating neutral pitch...")
+	n.calibratePitchNeutral()
+	n.logger.LogInPlaceSuccess("Neutral pitch calibrated to: %v", neutralPitch)
+	
 	return nil
 }
 func (n *NavigationNode) handle() {
@@ -179,35 +184,35 @@ func (n *NavigationNode) startNavigationLoop() {
 		if activePID && n.joystick.IsRest(n.z) {
 			currentState = "rest"
 			if n.lastState != currentState {
-				fmt.Println("Stabilizing at rest")
+				n.logger.LogInPlaceInfo("Stabilizing at rest")
 				n.lastState = currentState
 			}
 			n.stabalizeAtRest()
 		} else if activePID && n.joystick.IsMovingHorizontally() && n.joystick.IsRestAxes(n.z) {
 			currentState = "horizontal"
 			if n.lastState != currentState {
-				fmt.Println("Stabilizing at horizontal movement")
+				n.logger.LogInPlaceInfo("Stabilizing at horizontal movement")
 				n.lastState = currentState
 			}
 			n.stabalizeAtHorizontalMovement()
 		} else if activePID && n.joystick.IsMovingVertically(n.z) && n.joystick.IsRestYawAxis() && n.joystick.IsRestPitchAxis() {
 			currentState = "vertical"
 			if n.lastState != currentState {
-				fmt.Println("Stabilizing at vertical movement")
+				n.logger.LogInPlaceInfo("Stabilizing at vertical movement")
 				n.lastState = currentState
 			}
 			n.stabalizeAtVerticalMovement()
 		} else if activePID && !n.joystick.IsRestYawAxis() && n.joystick.IsRestPitchAxis() && n.joystick.IsRestHeaveAxis(n.z) {
 			currentState = "heading"
 			if n.lastState != currentState {
-				fmt.Println("Stabilizing while heading")
+				n.logger.LogInPlaceInfo("Stabilizing while heading")
 				n.lastState = currentState
 			}
 			n.stabalizeWhileHeading()
 		} else {
 			currentState = "manual"
 			if n.lastState != currentState {
-				fmt.Println("Manual navigation")
+				n.logger.LogInPlaceInfo("Manual navigation")
 				n.lastState = currentState
 			}
 			n.manualNavigation()
@@ -221,7 +226,7 @@ func (n *NavigationNode) startNavigationLoop() {
 
 func (n *NavigationNode) Run() {
 	if err := n.Init(); err != nil {
-		fmt.Printf("Failed to init navigation node: %v\n", err)
+		n.logger.LogInPlaceError("Failed to init navigation node: %v\n", err)
 		return
 	}
 
@@ -278,7 +283,7 @@ func (n *NavigationNode) calibratePitchNeutral() {
 
 	for time.Since(start) < maxCalibrationTime {
 		if n.imu == nil {
-			fmt.Println("IMU sensor not initialized, waiting...")
+			n.logger.LogInPlaceWarning("IMU sensor not initialized, waiting...")
 		} else {
 			readings = append(readings, n.imu.Pitch)
 		}
@@ -286,14 +291,14 @@ func (n *NavigationNode) calibratePitchNeutral() {
 		if time.Since(start) >= 5*time.Second && len(readings) == 0 {
 			// After 5s of trying, still no data
 			neutralPitch = -6.7
-			fmt.Println("Failed to get pitch data, using fallback.")
+			n.logger.LogInPlaceError("Failed to get pitch data, using fallback value %v", neutralPitch)
 			return
 		}
 	}
 
 	if len(readings) == 0 {
 		neutralPitch = -6.7
-		fmt.Println("No valid readings, using fallback.")
+		n.logger.LogInPlaceError("No valid readings, using fallback.")
 		return
 	}
 
@@ -302,6 +307,5 @@ func (n *NavigationNode) calibratePitchNeutral() {
 		neutralPitch += reading
 	}
 	neutralPitch /= float64(len(readings))
-	fmt.Println("Calibrated readings:", readings)
-	fmt.Println("Final neutral pitch value:", neutralPitch)
+
 }
