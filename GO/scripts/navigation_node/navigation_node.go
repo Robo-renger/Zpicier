@@ -89,7 +89,7 @@ func (n *NavigationNode) Init() error {
 		"back":        thruster.NewThruster(configurator.Get("BACK_PCA_CHANNEL"), 1100, 1900, 90),
 		"front":       thruster.NewThruster(configurator.Get("FRONT_PCA_CHANNEL"), 1100, 1900, 90),
 	}
-	// n.calibratePitchNeutral()
+	n.calibratePitchNeutral()
 	fmt.Println("Neutral pitch calibrated to:", neutralPitch)
 	n.navigation.SetThrusters(n.thrusters)
 	n.pid_heave.MinOutput = -1 
