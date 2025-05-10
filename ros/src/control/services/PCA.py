@@ -7,16 +7,15 @@ import busio
 from adafruit_pca9685 import PCA9685
 # from services.Logger import Logger
 # from DTOs.LogSeverity import LogSeverity
-
+from utils.Logger import Logger
 @implementer(PWMDriver)
 class PCA:
     __inst = None
 
     def __init__(self, i2c_address=0x40, frequency=50):
-        self.__simulation_mode = EnvParams().ENV == "SIMULATION"
         self.frequency = frequency
         self.__initializePCA(i2c_address, self.frequency)
-
+        self.logger = Logger()
     def __initializePCA(self, i2c_address, frequency):
         """
         Initialize the PCA9685 driver.
@@ -25,21 +24,17 @@ class PCA:
             RuntimeError: If the PCA9685 driver fails to initialize.
             ImportError: If the required libraries are not installed.
         """
-        if self.__simulation_mode:
-            print("Running in simulation mode. PCA9685 not initialized.")
-            self.pca = self.__createDummyPCA(frequency)
-        else:
-            try:
-                import board
-                import busio
-                from adafruit_pca9685 import PCA9685
-                i2c = busio.I2C(board.SCL, board.SDA)
-                self.pca = PCA9685(i2c, address=i2c_address)
-                self.pca.frequency = frequency
-            except (RuntimeError, ImportError):
-                pass
-                # Logger.logToFile(LogSeverity.FATAL,"Couldnt find PCA on i2c bus, while Environemnt is not set to 'SIMULATION'")
-                # Logger.logToGUI(LogSeverity.FATAL,"Couldnt find PCA on i2c bus, while Environemnt is not set to 'SIMULATION'")
+        try:
+            import board
+            import busio
+            from adafruit_pca9685 import PCA9685
+            i2c = busio.I2C(board.SCL, board.SDA)
+            self.pca = PCA9685(i2c, address=i2c_address)
+            self.pca.frequency = frequency
+        except (RuntimeError, ImportError):
+            self.logger.logErrorInPlace("PCA -> Couldnt find PCA on i2c bus")
+            # Logger.logToFile(LogSeverity.FATAL,"Couldnt find PCA on i2c bus, while Environemnt is not set to 'SIMULATION'")
+            # Logger.logToGUI(LogSeverity.FATAL,"Couldnt find PCA on i2c bus, while Environemnt is not set to 'SIMULATION'")
 
     def _microsecondsToDutycycle(self, microseconds):
         """
@@ -56,6 +51,7 @@ class PCA:
             ValueError: If the channel is not between 0 and 15.
         """
         if not 0 <= channel <= 15:
+            self.logger.logErrorInPlace(f"PCA -> Attempted to write to channel {channel} but PCA is not initialized")
             # Logger.logToFile(LogSeverity.ERROR, "Channel must be between 0 and 15.", "PCA9685")
             # Logger.logToGUI(LogSeverity.ERROR, "Channel must be between 0 and 15.", "PCA9685")
             raise ValueError("Channel must be between 0 and 15.")
@@ -64,7 +60,7 @@ class PCA:
             duty_cycle_value = self._microsecondsToDutycycle(microseconds)
             self.pca.channels[channel].duty_cycle = duty_cycle_value
         else:
-            pass
+            self.logger.logErrorInPlace(f"PCA -> Attempted to write to channel {channel} but PCA is not initialized")
             # Logger.logToFile(LogSeverity.FATAL, f"Attempted to write to channel {channel} but PCA is not initialized", "PCA")
             # Logger.logToGUI(LogSeverity.FATAL, f"Attempted to write to channel {channel} but PCA is not initialized", "PCA")
 
@@ -82,7 +78,7 @@ class PCA:
         """
         Deinitialize PCA if available.
         """
-        if self.pca is not None and not self.__simulation_mode:
+        if self.pca is not None:
             self.pca.deinit()
 
     @staticmethod
