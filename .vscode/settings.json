@@ -1,0 +1,14 @@
+{
+  "python.analysis.extraPaths": [
+    "./",                  // root-level for things like `core`, `data_contracts`
+    "./ros/install/control/lib/python3.10/site-packages", // generated protos
+    "./ros/install/msgs/lib/python3.10/site-packages",
+    "./ros/install",
+    "./ros/"
+  ],
+  "python.autoComplete.extraPaths": [
+    "./",
+    "./ros/install/control/lib/python3.10/site-packages",
+    
+  ]
+}
