@@ -6,12 +6,14 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"zpicier/core/logger"
 
 	"gopkg.in/yaml.v3"
 )
 
 type Configurator struct {
 	config map[string]string
+	logger *logger.Logger
 }
 
 var (
@@ -27,7 +29,7 @@ func AddConfigPath(path string) {
 	configMux.Lock()
 	defer configMux.Unlock()
 	if initializing {
-		fmt.Printf("Config path added after Init(): %s (ignored)\n", path)
+		instance.logger.LogInPlaceWarning("Config path added after Init(): %s (ignored)\n", path)
 		return
 	}
 	configPaths = append(configPaths, path)
@@ -38,7 +40,7 @@ func setBasePath(basePath string) {
 	configMux.Lock()
 	defer configMux.Unlock()
 	if initializing {
-		fmt.Printf("Base path set after Init(): %s (ignored)\n", basePath)
+		instance.logger.LogInPlaceWarning("Base path set after Init(): %s (ignored)\n", basePath)
 		return
 	}
 	for i, path := range configPaths {
@@ -75,12 +77,12 @@ func Init() error {
 	var err error
 	rootDir, err := getConfigPath()
 	if err != nil {
-		return fmt.Errorf("could not find project root (with /config): %v", err)
+		return instance.logger.LogInPlaceError("could not find project root (with /config): %v", err)
 	}
 	setBasePath(rootDir+"/")
 	once.Do(func() {
 		initializing = true
-		cfg := &Configurator{}
+		cfg := &Configurator{logger: logger.NewLogger()}
 		cfg.config, err = loadYAMLFiles(configPaths)
 		instance = cfg
 	})
@@ -94,12 +96,12 @@ func loadYAMLFiles(paths []string) (map[string]string, error) {
 	for _, path := range paths {
 		data, err := os.ReadFile(path)
 		if err != nil {
-			return nil, fmt.Errorf("failed to read config file %s: %v", path, err)
+			return nil, instance.logger.LogInPlaceError("failed to read config file %s: %v", path, err)
 		}
 
 		raw := make(map[string]interface{})
 		if err := yaml.Unmarshal(data, &raw); err != nil {
-			return nil, fmt.Errorf("failed to parse YAML %s: %v", path, err)
+			return nil, instance.logger.LogInPlaceError("failed to parse YAML %s: %v", path, err)
 		}
 
 		for k, v := range raw {

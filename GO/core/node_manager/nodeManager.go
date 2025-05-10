@@ -1,9 +1,9 @@
 package nodemanager
 
 import (
-	"fmt"
 	"sync"
 	"zpicier/core/interfaces"
+	"zpicier/core/logger"
 	"zpicier/scripts/navigation_node"
 	"zpicier/scripts/switching_node"
 )
@@ -11,12 +11,14 @@ import (
 type NodeManager struct {
 	nodes map[string]interfaces.Node
 	wg    *sync.WaitGroup
+	logger *logger.Logger
 }
 
 func NewNodeManager(wg *sync.WaitGroup) *NodeManager {
 	return &NodeManager{
 		nodes: make(map[string]interfaces.Node),
 		wg:    wg,
+		logger : logger.NewLogger(),
 	}
 }
 
@@ -27,7 +29,7 @@ func (nm *NodeManager) Register(name string, node interfaces.Node) {
 func (nm *NodeManager) Run(name string) error {
 	node, ok := nm.nodes[name]
 	if !ok {
-		return fmt.Errorf("node '%s' not registered", name)
+		return nm.logger.LogInPlaceError("Node '%s' not registered",name)
 	}
 	nm.wg.Add(1)
 	go func() {
@@ -45,11 +47,11 @@ func (nm *NodeManager) RegisterAll() {
 func (nm *NodeManager) Kill(name string) {
 	node, ok := nm.nodes[name]
 	if !ok {
-		fmt.Printf("Node '%s' not registered\n", name)
+		nm.logger.LogInPlaceWarning("Node '%s' not registered",name)
 		return
 	}
 	node.Kill()
-	fmt.Printf("Node '%s' killed\n", name)
+	nm.logger.LogInPlaceSuccess("Node '%s' killed",name)
 }
 func (nm *NodeManager) KillAll() {
 	for name := range nm.nodes {
@@ -58,7 +60,7 @@ func (nm *NodeManager) KillAll() {
 }
 func (nm *NodeManager) RunAll() {
 	for name := range nm.nodes {
-		fmt.Printf("Running node: %s\n", name)
+		nm.logger.LogInPlaceSuccess("Running node '%s'",name)
 		_ = nm.Run(name)
 	}
 }

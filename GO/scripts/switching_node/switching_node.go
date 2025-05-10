@@ -1,12 +1,12 @@
 package switching_node
 
 import (
-	"fmt"
 	"log"
 	"sync"
 	"time"
 
 	"zpicier/core/configurator"
+	"zpicier/core/logger"
 	joy "zpicier/services/joystick"
 	"zpicier/services/switching"
 )
@@ -15,12 +15,14 @@ type SwitchingNode struct {
 	switches map[string]*switching.Switch
 	wg       sync.WaitGroup
 	joystick *joy.Joystick
+	logger   *logger.Logger
 }
 
 func NewNode() *SwitchingNode {
 	return &SwitchingNode{
 		switches: make(map[string]*switching.Switch),
 		joystick: joy.GetInstance(),
+		logger:   logger.NewLogger(),
 	}
 }
 
@@ -35,7 +37,7 @@ func (n *SwitchingNode) Init() error {
 	for label, ref := range pins {
 		sw, err := switching.NewSwitch(ref)
 		if err != nil {
-			return fmt.Errorf("failed to init %s: %v", label, err)
+			return n.logger.LogInPlaceError("failed to init %s: %v", label, err)
 		}
 		n.switches[label] = sw
 	}
@@ -59,7 +61,7 @@ func (n *SwitchingNode) Kill() {
 func (n *SwitchingNode) Run() {
 	node := NewNode()
 	if err := node.Init(); err != nil {
-		fmt.Printf("Failed to init switching node: %v\n", err)
+		n.logger.LogInPlaceError("Failed to init switching node: %v\n", err)
 		return
 	}
 	node.handle()

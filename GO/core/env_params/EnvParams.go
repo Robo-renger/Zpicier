@@ -2,15 +2,16 @@ package env_params
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
+	"zpicier/core/logger"
 )
 
 type EnvParams struct {
 	data map[string]string
+	logger *logger.Logger
 }
 
 var (
@@ -35,7 +36,7 @@ func Init() error {
 			return
 		}
 
-		instance = &EnvParams{data: data}
+		instance = &EnvParams{data: data, logger: logger.NewLogger()}
 	})
 	return err
 }
@@ -77,7 +78,7 @@ func findProjectRoot() (string, error) {
 		}
 		dir = parent
 	}
-	return "", fmt.Errorf(".env not found near executable")
+	return "",instance.logger.LogInPlaceError("No .env file found in parent directories") 
 }
 
 
